@@ -1,0 +1,2 @@
+- get rid of the spotlight class
+- implement the spotlight stage
