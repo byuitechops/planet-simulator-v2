@@ -1,9 +1,3 @@
-/*
-    205,351
-    227,369
-    22,18
- */
-
 var imageData = [
 	{
 		name: "sea",
@@ -22,6 +16,12 @@ var imageData = [
 		},
 		macaroni: {
 			needed: false
+		},
+		bounds: {
+			width: 440,
+			height: 300,
+			x: 207,
+			y: 450
 		}
     },
 	{
@@ -41,6 +41,12 @@ var imageData = [
 		},
 		macaroni: {
 			needed: false
+		},
+		bounds: {
+			width: 200,
+			height: 400,
+			x: 330,
+			y: 400
 		}
     },
 	{
@@ -60,6 +66,12 @@ var imageData = [
 		},
 		macaroni: {
 			needed: false
+		},
+		bounds: {
+			width: 400,
+			height: 200,
+			x: 228,
+			y: 310
 		}
     },
 	{
@@ -79,6 +91,12 @@ var imageData = [
 		},
 		macaroni: {
 			needed: false
+		},
+		bounds: {
+			width: 430,
+			height: 430,
+			x: -75,
+			y: 210
 		}
     },
 	{
@@ -98,6 +116,12 @@ var imageData = [
 		},
 		macaroni: {
 			needed: false
+		},
+		bounds: {
+			width: 230,
+			height: 350,
+			x: 110,
+			y: 410
 		}
     },
 	{
@@ -117,6 +141,12 @@ var imageData = [
 		},
 		macaroni: {
 			needed: false
+		},
+		bounds: {
+			width: 250,
+			height: 470,
+			x: 500,
+			y: 345
 		}
     },
 	{
@@ -136,6 +166,12 @@ var imageData = [
 		},
 		macaroni: {
 			needed: false
+		},
+		bounds: {
+			width: 170,
+			height: 562,
+			x: 600,
+			y: 290
 		}
     },
 	{
@@ -159,6 +195,12 @@ var imageData = [
 			y: 654,
 			mirrored: false,
 			name: "underwaterVolcano"
+		},
+		bounds: {
+			width: 175,
+			height: 400,
+			x: 1270,
+			y: 370
 		}
     },
 	{
@@ -182,6 +224,12 @@ var imageData = [
 			y: 618,
 			mirrored: false,
 			name: "co3Desposition"
+		},
+		bounds: {
+			width: 250,
+			height: 220,
+			x: 1100,
+			y: 540
 		}
     },
 	{
@@ -205,6 +253,12 @@ var imageData = [
 			y: 643,
 			mirrored: false,
 			name: "sediment"
+		},
+		bounds: {
+			width: 170,
+			height: 229,
+			x: 940,
+			y: 520
 		}
     },
 	{
@@ -229,6 +283,12 @@ var imageData = [
 			mirrored: true,
 			name: "weatheringCRelease"
 
+		},
+		bounds: {
+			width: 220,
+			height: 230,
+			x: 1396,
+			y: 370
 		}
     },
 	{
@@ -248,74 +308,12 @@ var imageData = [
 		},
 		macaroni: {
 			needed: false
+		},
+		bounds: {
+			width: 350,
+			height: 250,
+			x: 800,
+			y: 370
 		}
     }
-    //*/
 ];
-
-
-//var containerIndexes = {};
-//containers.forEach(function (container, index) {
-//    containerIndexes[container.name] = index;
-//});
-//
-//console.log("containerIndexes:", containerIndexes);
-
-imageData.forEach(box => {
-	var larger = box.width > box.height ? box.width : box.height;
-	box.bounds = {
-		width: larger,
-		height: larger,
-		x: box.x,
-		y: box.y,
-		scale: {
-			x: box.scale.x * 1.5,
-			y: box.scale.y * 1.5
-		}
-	};
-	if (box.name === "sediment" || box.name === "weatheringCBurial") {
-		box.bounds.scale.x = 2;
-		box.bounds.scale.y = 2;
-	}
-	if (box.name === "insolation") {
-		box.bounds.y += 30;
-		box.bounds.scale.x = .9;
-		box.bounds.scale.y = .9;
-	}
-	if (box.name === "mountain") {
-		box.bounds.scale.x = 1.2;
-		box.bounds.scale.y = 1.2;
-	}
-	if (box.name === "volcano") {
-		box.bounds.scale.x = .9;
-		box.bounds.scale.y = .9;
-	}
-	if (box.name === "temperature") {
-		box.bounds.x -= 170;
-		box.bounds.scale.x = .5;
-		box.bounds.scale.y = 1.2;
-	}
-	if (box.name === "co2") {
-		box.bounds.x -= 180;
-		box.bounds.scale.x = .5;
-		box.bounds.scale.y = 1.5;
-	}
-	if (box.name === "underwaterVolcano") {
-		box.bounds.y += 50;
-		box.bounds.x -= 15;
-		box.bounds.scale.x = .65;
-		box.bounds.scale.y = 1.5;
-	}
-	if (box.name === "weatheringCBurial") {
-		box.bounds.y -= 50;
-//		        box.bounds.x -= 15;
-		box.bounds.scale.x = 5;
-		box.bounds.scale.y = 5;
-	}
-	box.bounds.x -= (box.bounds.width * box.bounds.scale.x - box.bounds.width)/2
-	box.bounds.y -= (box.bounds.height * box.bounds.scale.y - box.bounds.height)/2
-	box.bounds.width *= box.bounds.scale.x
-	box.bounds.height *= box.bounds.scale.y
-})
-
-console.log(imageData)

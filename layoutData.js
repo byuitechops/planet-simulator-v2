@@ -2,10 +2,16 @@ var layoutData = {
 	styling : {
 		normal : {
 			family: "'Roboto', sans-serif",
-			weight: 900,
+			weight: 600,
 			size: 14,
 			fill: "#fff",
 			leading: 1.2,
+		},
+		forcer : {
+			family: "'Roboto', sans-serif",
+			anchor : 'middle',
+			fill: "#297082",
+			size: 14
 		},
 		operator : {
 			size: 28,
@@ -103,19 +109,19 @@ var layoutData = {
 	forcers : [
 		[	{ ref: "images/paper-doll/mountains_inactive.png", width: 56, height:70 },
 			{ ref: "images/paper-doll/mountains_active.png", width:56, height:70 },
-			{ text:"MOUNTAINS", x:-10, y:80 } ],
+			{ text:"MOUNTAINS", x:25, y:75 } ],
 		[	{ ref: "images/paper-doll/volcanoes_inactive.png", width: 54, height:70 },
 			{ ref: "images/paper-doll/volcanoes_active.png", width:54, height:70 },
-			{ text:"VOLCANOES", x:-10, y:82 } ],
+			{ text:"VOLCANOES", x:25, y:75 } ],
 		[	{ ref: "images/paper-doll/carbon%20burial_inactive.png", width: 74, height:65 },
 			{ ref: "images/paper-doll/carbonBurial_active.png", width:74, height:65 },
-			{ text:"CARBON BURIAL", x:-10, y:77 } ],
+			{ text:"CARBON BURIAL", x:35, y:75 } ],
 		[	{ ref: "images/paper-doll/carbon%20release_inactive.png", width: 81, height:66 },
 			{ ref: "images/paper-doll/carbon%20release_active.png", width:81, height:66 },
-			{ text:"CARBON RELEASE", x:-10, y:77 } ],
+			{ text:"CARBON RELEASE", x:37, y:75 } ],
 		[	{ ref: "images/paper-doll/insulation_inactive.png", width: 52, height:70 },
 			{ ref: "images/paper-doll/insulation_active.png", width:52, height:70 },
-			{ text:"INSULATION", x:-10, y:81 } ]
+			{ text:"INSULATION", x:25, y:75 } ]
 	],
-	forcersPlacement : [[-10,0],[100,-2],[205,3],[326,3],[461,-1]]
+	forcersPlacement : [[-10,0],[95,0],[195,0],[323,0],[452,0]]
 }

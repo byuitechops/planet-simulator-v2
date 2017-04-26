@@ -1,4 +1,6 @@
 var draw = SVG('drawing').size(1730, 938)
+$('svg').attr('viewBox','0 0 1730 938')
+
 var shadow = function (add) {
 	var blur = add.offset(2, 2).in(add.sourceAlpha).gaussianBlur(4)
 	add.blend(add.source, blur)
@@ -20,13 +22,13 @@ layoutData.forcers.forEach((seg, i) => {
 		if (elm.ref)
 			group.add(draw.image(elm.ref, elm.width, elm.height))
 		else
-			group.add(draw.text(elm.text).x(elm.x).y(elm.y).font(layoutData.styling["normal"]))
+			group.add(draw.text(elm.text).x(elm.x).y(elm.y).font(layoutData.styling["forcer"]))
 	})
 	group.x(layoutData.forcersPlacement[i][0]).y(layoutData.forcersPlacement[i][1]).dy(-7)
-	group.children()[2].filter(shadow)
+	group.children()[1].opacity(0)
 	forcers.add(group)
 })
-forcers.x(272).y(107)
+forcers.x(272).y(110)
 
 var animated = draw.group()
 var mac = imageData[imageData.length - 1]
@@ -61,6 +63,7 @@ layoutData.text.forEach(line => {
 		)
 	)
 })
+
 text.add(draw.text(add => {
 	add.tspan('CO').font(layoutData.styling["notBold"])
 	add.tspan('2').dy(5).font(layoutData.styling["smallText"])
@@ -80,17 +83,34 @@ layoutData.timeline.forEach((seg, i) => {
 	time.children()[2].filter(shadow)
 	time.children()[0].opacity(0)
 	time.on("mouseover", function () {
-		this.children()[0].opacity(1)
-		this.children()[1].opacity(0)
-		this.children()[2].font('fill', '#444').unfilter()
-		$('body').css('cursor', 'pointer')
+		if(!this.data('selected')){
+			this.filter(function(add) {
+			  add.componentTransfer({
+				rgb: { type: 'linear', slope: 0.7 }
+			  })
+			})
+			$('body').css('cursor', 'pointer')
+		}
 	})
 	time.on("mouseout", function () {
-		this.children()[0].opacity(0)
-		this.children()[1].opacity(1)
-		this.children()[2].font('fill', '#fff').filter(shadow)
+		this.unfilter()
 		$('body').css('cursor', 'auto')
 	})
 	timeline.add(time)
 })
 timeline.x(147).y(204).scale(1, 1.2)
+
+function highlightTime(time){
+	time.parent(SVG.G).children().forEach(function(node){
+		node.children()[0].opacity(0)
+		node.children()[1].opacity(1)
+		node.children()[2].font('fill', '#fff').filter(shadow)
+		node.data('selected',false)
+	})
+	time.children()[0].opacity(1)
+	time.children()[1].opacity(0)
+	time.children()[2].font('fill', '#235255').unfilter()
+	time.data('selected',true)
+}
+
+highlightTime(timeline.children()[0])

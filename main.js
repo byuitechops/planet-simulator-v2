@@ -1,10 +1,11 @@
-const ANIMATION_DURATION = 50
+const ANIMATION_DURATION = 100
 
 
 // START
 getCSV( (err,csvData) => {
 	if(err){
 		console.log("couldn't get csv data")
+		window.location.search = "?file=test"
 	} else {
 		var main = new Main(csvData)
 		// while main is in scope, I need to give it access to the outside world
@@ -25,10 +26,37 @@ class Main {
 
     constructor(csvData){
 		this.csvData = csvData
+		console.log(this.csvData)
+		// set the forcer
+		this.setForcer(csvData[0])
         // Create an instance of the Animate Class
 		this.animator = new Animator(csvData)
 		this.isAnimating = false;
+		this.bindInput()
     }
+
+	setForcer(){
+		var arr = this.csvData[0]
+		var bools = [arr.mountain,arr.volcano,arr.weatheringCBurial||arr.sediment,arr.weatheringCRelease,arr.insolation].map(Boolean)
+		var thereWasAtLeastOne = false
+		bools.forEach((isActive,i) => {
+			if(isActive){
+				thereWasAtLeastOne = true
+				var group = forcers.children()[i]
+				group.children()[0].opacity(0)
+				group.children()[1].opacity(1)
+				group.children()[2].font(layoutData.styling["normal"]).font({weight:400}).filter(shadow)
+			}
+		})
+		if(!thereWasAtLeastOne){
+			forcers.opacity(0)
+			draw.text(arr.other)
+				.font(layoutData.styling["normal"])
+				.font({size:45,anchor : 'middle'})
+				.move(480,120)
+				.filter(shadow)
+		}
+	}
 
     /* Somehow this is called when one of the time periods is clicked */
     onClick(newPhase){
@@ -44,7 +72,17 @@ class Main {
 	// clean up when the animator is finished
 	done(){
 		this.isAnimating = false
-		console.log("Touch Down!")
+//		console.log("Touch Down!")
+	}
+
+	// allow me to press numbers to go to time period
+	bindInput(){
+		$(window).keydown(function(e) {
+			e.preventDefault(); // we are selfish
+			if(e.which >= 49 && e.which <= 53)
+				this.onClick(e.which - 49)
+			return;12
+		}.bind(this));
 	}
 }
 
@@ -69,6 +107,7 @@ class Animator {
 		this.stage = new SpotlightStage()
         // create an instance of the Text Controller
 		this.txtControl = new TextController()
+		this.txtControl.setTimePeriod(this.currentTP)
 		this.animatedObjects = []
 
 		// create all the animated Objects
@@ -82,7 +121,7 @@ class Animator {
 		})
 
 		// create all the Time Period Transitions
-		var numTP = $("#TimePeriodButtons button").length
+		var numTP = timeline.children().length
 		this.TPTransitions = []
 		for(var TP = 0; TP < numTP; TP++){
 			this.TPTransitions.push(
@@ -110,6 +149,7 @@ class Animator {
 		var runLikeTheWind = this.TPTransitions[start].run()
 		for(var i = start+1; i <= newTP; i++)
 			runLikeTheWind = runLikeTheWind.then(this.TPTransitions[i].run.bind(this.TPTransitions[i]))
+
 		// Then to finish things off
 		runLikeTheWind
 			.then(this.done.bind(this))
@@ -127,6 +167,7 @@ class Animator {
 		this.currentTP = newTP
 		// run through the list of animated objects
 		this.animatedObjects.forEach(AO => AO.setState(newTP))
+		highlightTime(timeline.children()[this.currentTP])
 	}
 
 	done(){
@@ -136,7 +177,7 @@ class Animator {
 
 		// disable the txtBox
 		this.txtControl.removeText()
-		this.txtControl.removeTitle()
+		this.txtControl.setTimePeriod(this.currentTP)
 		this.txtControl.disable()
 
 		this.callback()
@@ -175,21 +216,53 @@ class TimePeriodTransition {
 			// I know this is an odd way of doing it, but hey it works
 			this.resolve = resolve
 			this.reject = reject
+
 	 		// Pass control of the buttons to this TPT
-			// remove previous control
-			$("#next").off("click")
-			$("#prev").off("click")
-			$("#terminate").off("click")
-			// give us all the power
-			$("#next").click(this.goToNext.bind(this))
-			$("#prev").click(this.goToBack.bind(this))
-			$("#terminate").click(this.reject)
+			this.bindInputs()
+
 			// set the textBoxController's title to the periodName
 			this.txtControl.setTimePeriod(this.targetTP)
 			this.currentIndex = 0
 			// call the first function in the array to start the animations
 			this.chunks[this.currentIndex]()
+
+			highlightTime(timeline.children()[this.targetTP])
 		})
+	}
+
+	/* manage all of my event lisenters */
+	bindInputs(){
+		// remove previous control
+		$("#next").off("click")
+		$("#prev").off("click")
+		$("#terminate").off("click")
+		$(document).off('keydown')
+
+		// give us all the power
+		$("#next").click(this.goToNext.bind(this))
+		$("#prev").click(this.goToBack.bind(this))
+		$("#terminate").click(this.terminate.bind(this))
+
+		// cause arrow keys are cool
+		$(document).keydown(function(e) {
+			e.preventDefault(); // we are selfish
+			if(e.which == 39)
+				this.goToNext()
+			else if(e.which == 37 && this.currentIndex != 0)
+				this.goToBack()
+			else if(e.which == 13) // enter
+				this.terminate()
+			return;
+		}.bind(this));
+
+	}
+
+	terminate(){
+		$("#next").off("click")
+		$("#prev").off("click")
+		$("#terminate").off("click")
+		$(document).off('keydown')
+		this.reject()
 	}
 
     /* Creates the 2d array of animations that need to happen from the csv */
@@ -231,35 +304,32 @@ class TimePeriodTransition {
 
     /* called after the animation runs to prep for the next one */
     cleanUp(){
-        // if we still have more animations to do
-		if(this.currentIndex < this.chunks.length - 1 ){
-			// set the 'isWaiting' to false
-			this.isWaiting = true
-			// make the 'next' button clickable, and if the back button should be enabled
-			this.txtControl.enable(this.currentIndex == 0)
-		} else {
-			// We are done!
-			this.resolve()
-		}
+		// set the 'isWaiting' to false
+		this.isWaiting = true
+		// make the 'next' button clickable, and if the back button should be enabled
+		this.txtControl.enable(this.currentIndex == 0)
     }
 
     /* called when they click the 'next' or 'back' button */
     goToNext(){
-		console.log("---")
+//		console.log("---")
         // if 'isWaiting' is true
 		if(this.isWaiting){
 			// not waiting anymore
 			this.isWaiting = false
 			this.txtControl.disable()
 			this.currentIndex++
-			// call the next function in our array
-			this.chunks[this.currentIndex]()
+			// call the next function in our array if there is one
+			if(this.currentIndex < this.chunks.length)
+				this.chunks[this.currentIndex]()
+			else
+				this.resolve()
 		}
     }
 
 	/* called when they click the 'next' or 'back' button */
     goToBack(){
-		console.log("---")
+//		console.log("---")
         // if 'isWaiting' is true
 		if(this.isWaiting){
 			// not waiting anymore
@@ -268,6 +338,7 @@ class TimePeriodTransition {
 			// so we want to watch the animations we have already done again,
 			// so we have to reset the one that we just finished
 			this.resetAnimations(this.currentIndex--)
+			this.resetAnimations(this.currentIndex)
 
 			this.txtControl.disable()
 			// call the next function in our array
@@ -383,16 +454,19 @@ class SpotlightStage {
     	this.isActive = false
     	this.blackVeil = draw.rect(draw.width(), draw.height()).attr('visibility', 'hidden').maskWith(this.spotlights)
     	this.gradient = draw.gradient('radial', function (stop) {
-    		stop.at(.5, '#333')
-    		stop.at(2, '#fff')
+    		stop.at(.7, '#000')
+    		stop.at(1, '#fff')
     	})
-		this.numSpotlights = 0
+		this.numSpotlights = 2
+		for(var i = 0; i < this.numSpotlights; i++){
+			this.createLight()
+		}
     }
 
 	/* called when they want to start the show */
 	dimLights(){
         // do the magic to add the mask filter
-		this.blackVeil.attr('visibility','visable').opacity(0).animate(ANIMATION_DURATION).opacity(.9)
+		this.blackVeil.attr('visibility','visable').opacity(0).animate(ANIMATION_DURATION).opacity(.6)
 		this.isActive = true;
     }
 
@@ -400,85 +474,42 @@ class SpotlightStage {
     undimLights(){
         // do the magic to take off the mask filter
 		this.blackVeil.animate(ANIMATION_DURATION).opacity(0).attr('visibility','hidden')
-		for(var i = 0; i < this.spotlights.children().length-1; i++)
-			this.killLight()
 		this.isActive = false;
     }
 
     /* main move function, called during the animation process */
     move(AOarray){
 		return new Promise( (resolve,reject) => {
-			// Add more spotlights if we need more
-			while(this.numSpotlights < AOarray.length){
-				this.createLight()
-			}
-			// Turn off spotlights if we have too many
-			while(this.numSpotlights > AOarray.length){
-				this.killLight()
-			}
 			// if the lights are not dimmed, then dim them
 			if(!this.isActive){
 				this.dimLights()
 			}
+
+			// turn off lights that aren't needed
+			for(var i = 0; i < this.numSpotlights - AOarray.length; i++)
+				this.turnOffLight()
+
 			// for each animatedObject in the array move a coorsponding spotlight
-			for(var i = 1; i <= this.numSpotlights; i++){
-				var targ = AOarray[i-1].imageData.bounds
-				console.log(this.spotlights.children()[i].x(),targ.x)
-				this.spotlights.children()[i].animate(ANIMATION_DURATION)
+			AOarray.forEach((AO,i)=>{
+				var targ = AO.imageData.bounds
+				this.spotlights.children()[i+1].animate(ANIMATION_DURATION)
+					.opacity(1)
 					.move(targ.x, targ.y).radius(targ.width/2,targ.height/2)
 					.after(() => resolve(AOarray))
-			}
+			})
 		})
     }
 
     /* add a spotlight to our array */
     createLight(){
         // initalize a new spotlight and add it
-		this.numSpotlights++
-		if(this.spotlights.children().length-1 < this.numSpotlights)
-			this.spotlights.add(draw.ellipse(100,100).x(100).y(100).fill(this.gradient))
+		this.spotlights.add(draw.ellipse(100,100).x(100).y(100).fill(this.gradient).opacity(0))
     }
 
     /* remove a spotlight from our array */
-    killLight(){
+    turnOffLight(){
         // remove the lagger
 		this.spotlights.last().animate(ANIMATION_DURATION).opacity(0)
-		this.numSpotlights--
-    }
-}
-
-/* A single light to move around */
-class Spotlight {
-    /*
-     * Properties
-     *    isOn     {Boolean} - Are we currently showing on the screen
-     *    position {Object}  - contains our current position and size {x,y,width,height}
-     */
-
-    constructor(position){
-        // save the passed variables if any
-		this.position = position || {}
-		this.turnOn()
-    }
-
-	/* make the spotlight appear */
-    turnOn(){
-		this.isOn = true
-    }
-
-	/* make the spotlight disappear */
-    turnOff(){
-    }
-
-	/* folow the ballerina across the stage, then call the boss when done */
-    move(imageData,callback){
-		// if not on then turn it on
-		if(!this.isOn){ this.turnOn() }
-        // animate to the location
-        // save the new Position
-		this.position = imageData
-
-		callback()
     }
 }
 
@@ -493,21 +524,16 @@ class TextController {
     constructor(){
         // initalize out private properties
 		this.disable()
+		this.Times = ["Initial","100-100 Years","100 Thousand Years","1 Million Years","10 Million Years"]
     }
 
     /* displays the text from the animated Object */
     displayText(AOarray){
 		return new Promise( (resolve,reject) => {
-
-			// if there is more than one object in the array, concatinate their text's
-			var message = AOarray.reduce( (message,AO) => {
-				message += AO.TPdata[this.currentTP].text + "\n"
-				return message;
-			},"")
-
 			// display the text
-			$("#message").text(message)
-
+			$("#message").text(AOarray[0].TPdata[this.currentTP].text)
+			document.getElementById("details").innerHTML = `${AOarray[0].imageData.label} <span>${AOarray[0].TPdata[AOarray[0].currentState].value+1} &#11157; ${AOarray[0].TPdata[this.currentTP].value+1}</span>`
+			console.log(AOarray[0].imageData.label)
 			resolve(AOarray)
 		})
     }
@@ -517,6 +543,7 @@ class TextController {
 		return new Promise( (resolve,reject) => {
 			// we don't need the animatedObjectArray but just need to carry on the promise chain
 			$("#message").text("")
+			$("#details").text("")
 
 			// also make sure that 'isActive' is set to false
 			this.isActive = "false"
@@ -524,10 +551,6 @@ class TextController {
 			resolve(animatedObjectArray)
 		})
     }
-
-	removeTitle(){
-		$("#currentTP").text("")
-	}
 
     /* makes the buttons clickable */
     enable(disableBackButton){
@@ -553,7 +576,7 @@ class TextController {
     /* Set the title of our text box to the time period's name */
     setTimePeriod(currentTP){
 		this.currentTP = currentTP
-		var phaseTitle = $("button[data-phase="+this.currentTP+"]").text()
+		var phaseTitle = this.Times[this.currentTP]
 		$("#currentTP").text(phaseTitle)
     }
 }
