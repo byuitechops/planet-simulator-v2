@@ -41,6 +41,9 @@ imageData.forEach(elm => {
 		if (elm.name == "underwaterVolcano") {
 			var mask = draw.mask().add(draw.rect(elm.width, elm.height).x(elm.x).y(elm.y).scale(elm.scale.x, elm.scale.y).fill(gradient))
 			frame.maskWith(mask)
+		} else if(elm.name == "insolation") {
+			var mask = draw.mask().add(draw.rect(elm.width, elm.height).x(0).y(elm.y).scale(elm.scale.x, elm.scale.y).fill("#FFF"))
+			frame.maskWith(mask)
 		}
 		elm.handle.add(frame)
 	}

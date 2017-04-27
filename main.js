@@ -1,4 +1,4 @@
-const ANIMATION_DURATION = 100
+const ANIMATION_DURATION = 250
 
 
 // START
@@ -50,7 +50,14 @@ class Main {
 		})
 		if(!thereWasAtLeastOne){
 			forcers.opacity(0)
-			draw.text(arr.other)
+			draw.text(function(add) {
+				var text = arr.other.split("_2")
+				add.tspan(text[0])
+				if(text.length == 2){
+					add.tspan('2').dy(8).font({size:30})
+					add.tspan(text[1]).dy(-8)
+				}
+			})
 				.font(layoutData.styling["normal"])
 				.font({size:45,anchor : 'middle'})
 				.move(480,120)
@@ -386,11 +393,12 @@ class AnimatedObject {
 		this.forcer = csvData.shift()
 		this.TPdata = csvData
 		this.itemsPerFrame = this.imageData.items/5
-		this.setState(this.TPdata[0].value)
+		this.setState(0)
     }
 
     animateToState(state,callback){
-        // if they are trying to make us animate backwards, just skip to it
+
+		// if they are trying to make us animate backwards, just skip to it
 		if(state <= this.currentState){
 			this.setState(state)
 			callback()
@@ -398,24 +406,40 @@ class AnimatedObject {
 		}
         // run through all of our frames
 		// for some reason js dosen't have this range function
-		function range(s,e){return Array(e-s).fill().map((e,i)=>+s+i+1)}
+		function norm(n){return n/Math.abs(n) || 0}
+		function range(s,e){return Array(Math.abs(e-s)).fill().map((n,i)=>s+i*norm(e-s)+norm(e-s))}
 		// the list of frames that need to become visable
 		var queue = []
 		// get the list of frames that need to become visable
-		range(this.currentState,state*this.itemsPerFrame).forEach(i => {
-				queue.push(this.imageData.handle.select('[data-frame="'+i+'"][data-macaroni=false]').first())
+		range(this.TPdata[this.currentState].value*this.itemsPerFrame,this.TPdata[state].value*this.itemsPerFrame)
+			.forEach(i => {
+				queue.push({frame:i,mac:false})
 				if(this.imageData.macaroni.needed){
-					queue.push(this.imageData.handle.select('[data-frame="'+i/this.itemsPerFrame+'"][data-macaroni=true]').first())
+					queue.push({frame:i,mac:true})
 				}
 		})
 		// double wrap the the animations so that I can turn them into a promise chain
-		function promiseWrapper(frame){
+		var promiseWrapper = function(target){
 			return function(){
 				return new Promise(resolve => {
-					frame.animate(ANIMATION_DURATION).opacity(1).after(resolve)
+					var that = this // i'll need this in a sec
+					// turning on and off every single one of our images
+					this.imageData.handle.each(function(){
+						if(this.data('macaroni') == target.mac){
+							var i = this.data('frame')
+							// isFrame only knows about the main animation, but macaroni meters are also being processed here
+							if(that.imageData.isFrame && !target.mac)
+								this.animate(ANIMATION_DURATION).opacity(+(i <= target.frame))
+							else
+								this.animate(ANIMATION_DURATION).opacity(+(i == target.frame/(this.data('macaroni')?that.itemsPerFrame:1))) // macaronis don't have more than one item per frame
+						}
+					})
+					// yah this is probably the worst possible way to do this
+					setTimeout(resolve,ANIMATION_DURATION)
 				})
-			}
-		}
+			}.bind(this)
+		}.bind(this)
+
 		queue.map(promiseWrapper) // turn the frames that need to be animated into promise functions
 			.reduce((prev, cur) => prev.then(cur), Promise.resolve()) // chain all the promise functions
 			.then(callback) // then call mom
@@ -454,10 +478,10 @@ class SpotlightStage {
     	this.isActive = false
     	this.blackVeil = draw.rect(draw.width(), draw.height()).attr('visibility', 'hidden').maskWith(this.spotlights)
     	this.gradient = draw.gradient('radial', function (stop) {
-    		stop.at(.7, '#000')
-    		stop.at(1, '#fff')
+    		stop.at(.7, 'rgba(0,0,0,1)')
+    		stop.at(1, 'rgba(0,0,0,0)')
     	})
-		this.numSpotlights = 2
+		this.numSpotlights = 11
 		for(var i = 0; i < this.numSpotlights; i++){
 			this.createLight()
 		}
@@ -486,8 +510,7 @@ class SpotlightStage {
 			}
 
 			// turn off lights that aren't needed
-			for(var i = 0; i < this.numSpotlights - AOarray.length; i++)
-				this.turnOffLight()
+			this.turnOffLight(this.spotlights.children().filter(node => node.opacity()).length - AOarray.length -1)
 
 			// for each animatedObject in the array move a coorsponding spotlight
 			AOarray.forEach((AO,i)=>{
@@ -507,9 +530,12 @@ class SpotlightStage {
     }
 
     /* remove a spotlight from our array */
-    turnOffLight(){
+    turnOffLight(num){
         // remove the lagger
-		this.spotlights.last().animate(ANIMATION_DURATION).opacity(0)
+		var visable = this.spotlights.children().filter(node => node.opacity()).reverse()
+		for(var i = 0; i < num; i++){
+			visable[i].animate(ANIMATION_DURATION).opacity(0)
+		}
     }
 }
 
@@ -533,7 +559,6 @@ class TextController {
 			// display the text
 			$("#message").text(AOarray[0].TPdata[this.currentTP].text)
 			document.getElementById("details").innerHTML = `${AOarray[0].imageData.label} <span>${AOarray[0].TPdata[AOarray[0].currentState].value+1} &#11157; ${AOarray[0].TPdata[this.currentTP].value+1}</span>`
-			console.log(AOarray[0].imageData.label)
 			resolve(AOarray)
 		})
     }

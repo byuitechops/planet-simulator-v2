@@ -127,7 +127,7 @@ var imageData = [
 	{
 		name: "co2",
 		label: "CO<sub>2</sub>",
-		isFrame: false,
+		isFrame: true,
 		items: 10,
 		width: 126,
 		height: 440,
@@ -152,7 +152,7 @@ var imageData = [
 	{
 		name: "temperature",
 		label: "Temperature",
-		isFrame: false,
+		isFrame: true,
 		items: 10,
 		width: 148,
 		height: 522,
