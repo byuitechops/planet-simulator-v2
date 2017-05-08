@@ -5,7 +5,7 @@ const ANIMATION_DURATION = 250
 getCSV( (err,csvData) => {
 	if(err){
 		console.log("couldn't get csv data")
-		window.location.search = "?file=test"
+//		window.location.search = "?file=test"
 	} else {
 		var main = new Main(csvData)
 		// while main is in scope, I need to give it access to the outside world
@@ -230,6 +230,8 @@ class TimePeriodTransition {
 			// set the textBoxController's title to the periodName
 			this.txtControl.setTimePeriod(this.targetTP)
 			this.currentIndex = 0
+			this.isWaiting = false
+
 			// call the first function in the array to start the animations
 			this.chunks[this.currentIndex]()
 
@@ -269,6 +271,7 @@ class TimePeriodTransition {
 		$("#prev").off("click")
 		$("#terminate").off("click")
 		$(document).off('keydown')
+		this.isWaiting = true;
 		this.reject()
 	}
 
@@ -311,10 +314,12 @@ class TimePeriodTransition {
 
     /* called after the animation runs to prep for the next one */
     cleanUp(){
-		// set the 'isWaiting' to false
-		this.isWaiting = true
-		// make the 'next' button clickable, and if the back button should be enabled
-		this.txtControl.enable(this.currentIndex == 0)
+		if(this.isWaiting == false){
+			// set the 'isWaiting' to false
+			this.isWaiting = true
+			// make the 'next' button clickable, and if the back button should be enabled
+			this.txtControl.enable(this.currentIndex == 0)
+		}
     }
 
     /* called when they click the 'next' or 'back' button */
