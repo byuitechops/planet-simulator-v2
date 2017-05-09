@@ -6,6 +6,7 @@ getCSV( (err,csvData) => {
 	if(err){
 		console.log("couldn't get csv data")
 //		window.location.search = "?file=test"
+
 	} else {
 		var main = new Main(csvData)
 		// while main is in scope, I need to give it access to the outside world
@@ -555,7 +556,7 @@ class TextController {
     constructor(){
         // initalize out private properties
 		this.disable()
-		this.Times = ["Initial","100-100 Years","100 Thousand Years","1 Million Years","10 Million Years"]
+		this.Times = ["Initial","100-1000 Years","100 Thousand Years","1 Million Years","10 Million Years"]
     }
 
     /* displays the text from the animated Object */
