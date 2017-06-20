@@ -2,8 +2,8 @@ linkName,url,icon
 Carbon Dioxide Down,co2Down,
 Carbon Dioxide Up,co2Up,
 Volcanoes Down,VolcanoesDown,volcanoes_active.png
-Volcanoes Up Ice house,VolcanoesUpIcehouse,volcanoes_active.png
-Volcanoes Up Hot house,VolcanoesUpHothouse,volcanoes_active.png
+Volcanoes Up Icehouse,VolcanoesUpIcehouse,volcanoes_active.png
+Volcanoes Up Hothouse,VolcanoesUpHothouse,volcanoes_active.png
 Mountain Building Up,MountainBuildHothouse,mountains_active.png
 Mountain Building Down,MountainBuildDown,mountains_active.png
 Carbon Burial Up,CBurialUp,
