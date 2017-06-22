@@ -1,6 +1,7 @@
 body {
 	background-color:#0b1312;
 	margin: 5px auto;
+  box-sizing: border-box;
 }
 
 #descriptionBox {
@@ -9,30 +10,40 @@ body {
 	color:#FFF;
 	font-family: 'Roboto Slab', serif;
 	padding:10px;
-	position:relative;
-	width: 86%;
+  display: flex;
+	width: 89%;
+  max-width: 1140px;
 	margin: 20px auto;
-	height: 7vw;
-	max-width: 126vh;
 }
-
+#content{
+	width: 75%;
+  padding-right: 20px;
+}
 #buttons {
-	position:absolute;
-	top:1vw;
-	right:1vw;
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  justify-content: flex-end;
 }
 
 #next, #prev, #terminate {
 	background-color:#181818;
 	border: 1px solid #d8d8d8;
-	padding: 1vw;
-	margin: .6vw;
-	float:right;
-	font-size: 1vw;
+	padding: 6px 8px;
+	margin: 3px;
+	font-size: 14pt;
 	color:#d8d8d8;
 	cursor:pointer;
 }
+#next, #prev{
+  flex-grow: 1;
+}
 
+#terminate{
+  flex-grow: 2;
+}
 #next:disabled, #prev:disabled, #terminate:disabled{
 	border-color: #333;
 	color:#333;
@@ -44,26 +55,26 @@ body {
 }
 
 #message {
-	font-size: 1vw;
-	width:75%;
+	font-size: 14pt;
 	margin:3px;
 	margin-top:5px;
 }
 
 h3 {
-	font-size: 1.5vw;
+	font-size: 16pt;
 	margin:3px;
 	display:inline;
 }
 
 #details {
-	font-size: 1.5vw;
+	font-size: 16pt;
 	margin-left: 2vw;
 	color:#888
 }
 
 svg {
-	width: 90vw;
+	width: 100%;
+  max-width: 1170px;
 	margin: 0 auto;
 	height: 70vh;
 	max-height: 50vw;
