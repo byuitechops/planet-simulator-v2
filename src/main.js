@@ -100,8 +100,8 @@ class Animator {
      * Properties
      *    stage   {SpotLightStage} - An array of spotlight objects to pass on
      *    csvData         {Object} - contains all the information we got from the csv
-	 *	  animatedObjects  {Array} - List of all the animated objects
-	 *	  TPTransitions    {Array} - List of all the Time Period Transitions
+	   *	  animatedObjects  {Array} - List of all the animated objects
+     *	  TPTransitions    {Array} - List of all the Time Period Transitions
      *    currentTP      {Integer} - says which Time Period we are currently on
      *    txtControl      {Object} - Manages the messages at the bottom of the screen
      *    callback        {Object} - Call mom when we are done
@@ -564,7 +564,7 @@ class TextController {
 		return new Promise( (resolve,reject) => {
 			// display the text
 			$("#message").text(AOarray[0].TPdata[this.currentTP].text)
-			document.getElementById("details").innerHTML = `${AOarray[0].imageData.label} <span>${AOarray[0].TPdata[AOarray[0].currentState].value+1} &#11157; ${AOarray[0].TPdata[this.currentTP].value+1}</span>`
+			document.getElementById("details").innerHTML = `${AOarray[0].imageData.label} <span>${AOarray[0].TPdata[AOarray[0].currentState].value+1} to ${AOarray[0].TPdata[this.currentTP].value+1}</span>`
 			resolve(AOarray)
 		})
     }
