@@ -1,4 +1,8 @@
-const ANIMATION_DURATION = 1000
+/*eslint-env es6, browser*/
+/*eslint no-console:0, no-unused-vars:0*/
+/*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime*/
+
+const ANIMATION_DURATION = 1000;
 
 
 // START
@@ -27,7 +31,6 @@ class Main {
 
     constructor(csvData) {
         this.csvData = csvData
-        console.log(this.csvData)
         // set the forcer
         this.setForcer(csvData[0])
         // Create an instance of the Animate Class
@@ -99,7 +102,6 @@ class Main {
             if (e.which >= 49 && e.which <= 53)
                 this.onClick(e.which - 49)
             return;
-            12
         }.bind(this));
     }
 }
@@ -137,7 +139,6 @@ class Animator {
             // and add it too our collection
             this.animatedObjects.push(tempAO)
         })
-
         // create all the Time Period Transitions
         var numTP = timeline.children().length
         this.TPTransitions = []
@@ -547,7 +548,8 @@ class SpotlightStage {
                 var targ = AO.imageData.bounds
                 this.spotlights.children()[i + 1].animate(ANIMATION_DURATION)
                     .opacity(1)
-                    .move(targ.x, targ.y).radius(targ.width / 2, targ.height / 2)
+                    .move(targ.x, targ.y)
+                    .radius(targ.width / 2, targ.height / 2)
                     .after(() => resolve(AOarray))
             })
         })
@@ -555,8 +557,8 @@ class SpotlightStage {
 
     /* add a spotlight to our array */
     createLight() {
-        // initalize a new spotlight and add it
-        this.spotlights.add(draw.ellipse(100, 100).x(100).y(100).fill(this.gradient).opacity(0))
+        // initalize a new spotlight in center of screen and add it
+        this.spotlights.add(draw.ellipse(100, 100).x(draw.width() / 2).y(draw.height() / 2).fill(this.gradient).opacity(0))
     }
 
     /* remove a spotlight from our array */

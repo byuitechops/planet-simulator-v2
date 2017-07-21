@@ -1,4 +1,4 @@
-/*jslint plusplus: true, browser: true, devel: true */
+/*eslint-env es6, browser*/
 /*global $, d3*/
 
 window.getCSV = (function () {
@@ -92,7 +92,7 @@ window.getCSV = (function () {
                         }
                         //set it
                         timeZone[column] = {
-                            value: +row[column]-1 || 0,
+                            value: +row[column] - 1 || 0,
                             timing: timingDefault,
                             text: ""
                         };
@@ -142,7 +142,6 @@ window.getCSV = (function () {
             }
 
             fileDataRaw = parseNewCSV(fileText);
-
             callBack(null, fileDataRaw);
         });
 
