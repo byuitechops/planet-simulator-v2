@@ -505,14 +505,16 @@ class SpotlightStage {
      */
     constructor() {
         // Initalize our array
-        this.spotlights = draw.mask().add(draw.rect(draw.width(), draw.height()).fill('#fff'))
+        this.spotlights = draw.mask().attr('name', 'spotlights').add(draw.rect(draw.width(), draw.height()).fill('#fff'))
         this.isActive = false
         this.blackVeil = draw.rect(draw.width(), draw.height()).attr('visibility', 'hidden').maskWith(this.spotlights)
         this.gradient = draw.gradient('radial', function (stop) {
             stop.at(.7, 'rgba(0,0,0,1)')
             stop.at(1, 'rgba(0,0,0,0)')
         })
-        this.numSpotlights = 11
+        //count the total possible spotlights
+        this.numSpotlights = imageData.reduce((sum, image) => sum + image.spotlights.length, 0)
+        //make them all
         for (var i = 0; i < this.numSpotlights; i++) {
             this.createLight()
         }
@@ -539,17 +541,21 @@ class SpotlightStage {
             if (!this.isActive) {
                 this.dimLights()
             }
+            var spotsNeeded = AOarray.reduce((spots, AO) => {
+                return spots.concat(AO.imageData.spotlights);
+            }, []);
 
             // turn off lights that aren't needed
-            this.turnOffLight(this.spotlights.children().filter(node => node.opacity()).length - AOarray.length - 1)
+            this.turnOffLight(this.spotlights.children().filter(node => node.opacity()).length - spotsNeeded.length - 1)
 
-            // for each animatedObject in the array move a coorsponding spotlight
-            AOarray.forEach((AO, i) => {
-                var targ = AO.imageData.bounds
+            //move all the spots to their correct spot
+            spotsNeeded.forEach((spot, i) => {
+                //var targ = AO.imageData.spotlights[0]
+                //i +1 because the first child is the rect that is masked
                 this.spotlights.children()[i + 1].animate(ANIMATION_DURATION)
                     .opacity(1)
-                    .move(targ.x, targ.y)
-                    .radius(targ.width / 2, targ.height / 2)
+                    .move(spot.x, spot.y)
+                    .radius(spot.width / 2, spot.height / 2)
                     .after(() => resolve(AOarray))
             })
         })
