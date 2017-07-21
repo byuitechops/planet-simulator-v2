@@ -2,33 +2,34 @@
 <html>
 
 <head>
-	<link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab" rel="stylesheet">
-	<link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
+
 <body>
-	<main>
-		<div id="drawing"></div>
-		<div id="descriptionBox">
-      <div id="content">
-			<h3 id="currentTP"></h3><span id="details"></span>
-			<p id="message"></p>
-      </div>
-			<div id="buttons">
-				<button id="next">Next</button>
-				<button id="prev">Back</button>
-				<button id="terminate">Skip To End</button>
-			</div>
-		</div>
-	</main>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-dsv/1.0.3/d3-dsv.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.5.1/svg.min.js"></script>
-	<script src="./svg.filter.js"></script>
-	<script src="src/getCSV.js"></script>
-	<script src="src/imageData.js"></script>
-	<script src="src/layoutData.js"></script>
-	<script src="src/layout.js"></script>
-	<script src="src/main.js"></script>
+    <main>
+        <div id="drawing"></div>
+        <div id="descriptionBox">
+            <div id="content" class="descriptionBox">
+                <h3 id="currentTP"></h3><span id="details"></span>
+                <p id="message"></p>
+            </div>
+            <div id="buttons" class="descriptionBox">
+                <button id="next">Next</button>
+                <button id="prev">Back</button>
+                <button id="terminate">Skip To End</button>
+            </div>
+        </div>
+    </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-dsv/1.0.3/d3-dsv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.5.1/svg.min.js"></script>
+    <script src="./svg.filter.js"></script>
+    <script src="src/getCSV.js"></script>
+    <script src="src/imageData.js"></script>
+    <script src="src/layoutData.js"></script>
+    <script src="src/layout.js"></script>
+    <script src="src/main.js"></script>
 </body>
 
 </html>
