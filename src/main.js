@@ -1,6 +1,6 @@
 /*eslint-env es6, browser*/
 /*eslint no-console:0, no-unused-vars:0*/
-/*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime*/
+/*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime, paramACircle*/
 
 const ANIMATION_DURATION = 1000;
 
@@ -555,8 +555,7 @@ class SpotlightStage {
                 //i +1 because the first child is the rect that is masked
                 this.spotlights.children()[i + 1].animate(ANIMATION_DURATION)
                     .opacity(1)
-                    .move(spot.x, spot.y)
-                    .radius(spot.width / 2, spot.height / 2)
+                    .plot(spot)
                     .after(() => resolve(AOarray))
             })
         })
@@ -565,7 +564,7 @@ class SpotlightStage {
     /* add a spotlight to our array */
     createLight() {
         // initalize a new spotlight in center of screen and add it
-        this.spotlights.add(draw.ellipse(100, 100).x(draw.width() / 2).y(draw.height() / 2).fill(this.gradient).opacity(0))
+        this.spotlights.add(draw.polygon(paramACircle(draw.width() / 2, draw.height() / 2, 100, 100)).fill(this.gradient).opacity(0))
     }
 
     /* remove a spotlight from our array */
@@ -644,3 +643,20 @@ class TextController {
         $("#currentTP").text(phaseTitle)
     }
 }
+
+
+//a function that draws the outlines for each spotlight
+function drawSpotLightOutlines() {
+    imageData.forEach(function (image) {
+        image.spotlights.forEach(function (spotlight, i) {
+
+            draw.polygon(spotlight).fill('none').stroke({
+                color: '#f06',
+                width: 4,
+                linecap: 'round',
+                linejoin: 'round'
+            });
+        })
+    })
+}
+//drawSpotLightOutlines();

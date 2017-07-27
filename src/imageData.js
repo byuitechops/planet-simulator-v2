@@ -1,31 +1,38 @@
 /*eslint-env browser*/
-/*eslint no-unused-vars:0*/
-//radiusPathCircle = 255,310,
-//width : 90, 100
-function makeBigMeeterSpots(spotWidth, pathRadius) {
-    var spotsOut = [],
-        count = 9, //number of small spots
-        xPathCircle = 420, //the x of the path the small spotLights are set on
-        yPathCircle = 567, //the y of the path small spotLights are set on
-        offset = spotWidth / 2, //they are moved from the top left corner not center
-        startAngle = Math.PI / 3.5, //the starting angle of the path the small spotLights are set on
-        endAngle = -startAngle, //the ending angle of the path the small spotLights are set on
-        gap = startAngle - endAngle,
-        step = gap / (count - 1),
+/*eslint no-unused-vars:0, no-console:0*/
+
+//Given am,y, width and height, this function returns an array of arrays of x an y points for the parameterization of a circle
+function paramACircle(x, y, width, height) {
+    var pointsOut = [],
+        pointCount = 24, //number of small spots
+        step = (Math.PI * 2) / (pointCount), //how many radians for each point
+        startAngle = Math.PI / 2, // start at the top point of the circle
+        endAngle = startAngle - (step * (pointCount)), // subtract because I want to go clock wise, -1 because we end short of the full circle because svg polygon conects the two ends 
+        rightRadius = width / 2,
+        upRadius = height / 2,
         i;
+    if (width == 175) {
+
+        console.log("rightRadius:", rightRadius);
+        console.log("upRadius:", upRadius);
+    }
 
     //for all the setps move a long the path the small spotLights are set on and make a spot
     for (i = startAngle; i <= startAngle && i >= endAngle; i -= step) {
-        spotsOut.push({
-            width: spotWidth,
-            height: spotWidth,
-            //this is a parameterization of a circle
-            x: xPathCircle + pathRadius * Math.cos(i) - offset,
-            y: yPathCircle + pathRadius * -Math.sin(i) - offset
-        })
+        pointsOut.push([
+            //X of the parameterization of a circle 
+            x + rightRadius * Math.cos(i),
+            //Y of the parameterization of a circle, -i because the y axes is flipped
+            y + upRadius * Math.sin(-i)
+        ]);
     }
-    return spotsOut;
+    return pointsOut;
 }
+var spot = [[729, 473], [733, 451], [756, 442], [775, 445], [826, 490], [884, 566], [923, 649], [935, 757], [922, 847], [887, 937], [838, 1007], [776, 1062], [752, 1065], [736, 1050], [731, 1033], [739, 1011], [797, 963], [838, 904], [864, 840], [873, 759], [863, 666], [832, 594], [787, 538], [739, 493]];
+spot.forEach(function (point) {
+    point[0] *= 0.75;
+    point[1] *= 0.75;
+})
 
 var imageData = [
     {
@@ -46,14 +53,8 @@ var imageData = [
         macaroni: {
             needed: false
         },
-        spotlights: [{
-            width: 440,
-            height: 300,
-            x: 207,
-            y: 450
-        }]
-    },
-    {
+        spotlights: [paramACircle(427, 600, 440, 300)],
+    }, {
         name: "volcano",
         label: "Volcanic Activity",
         isFrame: true,
@@ -71,14 +72,8 @@ var imageData = [
         macaroni: {
             needed: false
         },
-        spotlights: [{
-            width: 200,
-            height: 400,
-            x: 330,
-            y: 400
-        }]
-    },
-    {
+        spotlights: [paramACircle(430, 600, 200, 400)]
+    }, {
         name: "ice",
         label: "Ice",
         isFrame: false,
@@ -96,19 +91,11 @@ var imageData = [
         macaroni: {
             needed: false
         },
-        spotlights: [{
-            width: 400,
-            height: 200,
-            x: 228,
-            y: 310
-        }, {
-            width: 400,
-            height: 200,
-            x: 228,
-            y: 600
-        }]
-    },
-    {
+        spotlights: [
+            paramACircle(428, 410, 400, 200),
+            paramACircle(428, 700, 400, 200)
+        ]
+    }, {
         name: "insolation",
         label: "Insolation",
         isFrame: false,
@@ -126,14 +113,8 @@ var imageData = [
         macaroni: {
             needed: false
         },
-        spotlights: [{
-            width: 430,
-            height: 430,
-            x: -75,
-            y: 210
-        }]
-    },
-    {
+        spotlights: [paramACircle(140, 425, 430, 430)]
+    }, {
         name: "mountain",
         label: "Mountains",
         isFrame: false,
@@ -151,14 +132,8 @@ var imageData = [
         macaroni: {
             needed: false
         },
-        spotlights: [{
-            width: 230,
-            height: 350,
-            x: 110,
-            y: 410
-        }]
-    },
-    {
+        spotlights: [paramACircle(225, 585, 230, 350)]
+    }, {
         name: "co2",
         label: "CO<sub>2</sub>",
         isFrame: true,
@@ -176,9 +151,8 @@ var imageData = [
         macaroni: {
             needed: false
         },
-        spotlights: makeBigMeeterSpots(90, 255)
-    },
-    {
+        spotlights: [spot]
+    }, {
         name: "temperature",
         label: "Temperature",
         isFrame: true,
@@ -196,9 +170,8 @@ var imageData = [
         macaroni: {
             needed: false
         },
-        spotlights: makeBigMeeterSpots(100, 310)
-    },
-    {
+        spotlights: [paramACircle(613, 324, 100, 100)]
+    }, {
         name: "underwaterVolcano",
         label: "Volcanic Activity",
         isFrame: true,
@@ -220,14 +193,8 @@ var imageData = [
             mirrored: false,
             name: "underwaterVolcano"
         },
-        spotlights: [{
-            width: 175,
-            height: 400,
-            x: 1270,
-            y: 370
-        }]
-    },
-    {
+        spotlights: [paramACircle(1357, 570, 175, 400)]
+    }, {
         name: "co3Desposition",
         label: "Carbonate Desposition",
         isFrame: true,
@@ -249,14 +216,8 @@ var imageData = [
             mirrored: false,
             name: "co3Desposition"
         },
-        spotlights: [{
-            width: 250,
-            height: 220,
-            x: 1100,
-            y: 540
-        }]
-    },
-    {
+        spotlights: [paramACircle(1225, 650, 250, 220)]
+    }, {
         name: "sediment",
         label: "Sediment (Carbon Burial)",
         isFrame: true,
@@ -278,14 +239,8 @@ var imageData = [
             mirrored: false,
             name: "sediment"
         },
-        spotlights: [{
-            width: 170,
-            height: 229,
-            x: 940,
-            y: 520
-        }]
-    },
-    {
+        spotlights: [paramACircle(1025, 634, 170, 229)]
+    }, {
         name: "weatheringCRelease",
         label: "Weathering (Carbon Release)",
         isFrame: true,
@@ -308,14 +263,8 @@ var imageData = [
             name: "weatheringCRelease"
 
         },
-        spotlights: [{
-            width: 220,
-            height: 230,
-            x: 1396,
-            y: 370
-        }]
-    },
-    {
+        spotlights: [paramACircle(1506, 485, 220, 230)]
+    }, {
         name: "weatheringCBurial",
         label: "Weathering (Carbon Burial)",
         isFrame: false,
@@ -333,11 +282,6 @@ var imageData = [
         macaroni: {
             needed: false
         },
-        spotlights: [{
-            width: 350,
-            height: 250,
-            x: 800,
-            y: 370
-        }]
+        spotlights: [paramACircle(975, 495, 350, 250)]
     }
 ];
