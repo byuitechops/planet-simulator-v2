@@ -180,6 +180,7 @@ class Animator {
             this.currentTP = newTP
         } else {
             this.setState(newTP)
+            this.txtControl.setTimePeriod(newTP)
             this.callback()
         }
 
