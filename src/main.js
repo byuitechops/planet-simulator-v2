@@ -2,7 +2,7 @@
 /*eslint no-console:0, no-unused-vars:0*/
 /*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime, paramACircle*/
 
-const ANIMATION_DURATION = 1000;
+const ANIMATION_DURATION = 100;
 
 
 // START
@@ -652,11 +652,9 @@ function drawSpotLightOutlines() {
 
             draw.polygon(spotlight).fill('none').stroke({
                 color: '#f06',
-                width: 4,
-                linecap: 'round',
-                linejoin: 'round'
+                width: 4
             });
         })
     })
 }
-//drawSpotLightOutlines();
+drawSpotLightOutlines();

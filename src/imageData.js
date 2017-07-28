@@ -4,18 +4,13 @@
 //Given am,y, width and height, this function returns an array of arrays of x an y points for the parameterization of a circle
 function paramACircle(x, y, width, height) {
     var pointsOut = [],
-        pointCount = 24, //number of small spots
+        pointCount = 24, //number of points in circle
         step = (Math.PI * 2) / (pointCount), //how many radians for each point
         startAngle = Math.PI / 2, // start at the top point of the circle
         endAngle = startAngle - (step * (pointCount)), // subtract because I want to go clock wise, -1 because we end short of the full circle because svg polygon conects the two ends 
         rightRadius = width / 2,
         upRadius = height / 2,
         i;
-    if (width == 175) {
-
-        console.log("rightRadius:", rightRadius);
-        console.log("upRadius:", upRadius);
-    }
 
     //for all the setps move a long the path the small spotLights are set on and make a spot
     for (i = startAngle; i <= startAngle && i >= endAngle; i -= step) {
@@ -30,6 +25,36 @@ function paramACircle(x, y, width, height) {
 }
 var spot = [[729, 473], [733, 451], [756, 442], [775, 445], [826, 490], [884, 566], [923, 649], [935, 757], [922, 847], [887, 937], [838, 1007], [776, 1062], [752, 1065], [736, 1050], [731, 1033], [739, 1011], [797, 963], [838, 904], [864, 840], [873, 759], [863, 666], [832, 594], [787, 538], [739, 493]];
 spot.forEach(function (point) {
+    point[0] *= 0.75;
+    point[1] *= 0.75;
+})
+
+
+var volSpot = [[576.7, 595.1],
+                    [665.9, 569.9],
+                    [755.1, 544.6],
+                    [814.5, 633],
+                    [758.7, 665.4],
+                    [665, 681.6],
+                    [630.7, 781.6],
+                    [657.8, 857.8],
+                    [692, 887],
+                    [641.5, 910.5],
+                    [657.8, 950.1],
+                    [724.4, 955.5],
+                    [730.7, 988],
+                    [609.6, 1022],
+                    [495.6, 1000],
+                    [492, 932.1],
+                    [540.6, 921.3],
+                    [555.9, 844.7],
+                    [530.3, 746],
+                    [470.3, 672.6],
+                    [385.6, 696],
+                    [324.4, 616.7],
+                    [389.3, 539.2],
+                    [483, 567.2]]
+volSpot.forEach(function (point) {
     point[0] *= 0.75;
     point[1] *= 0.75;
 })
@@ -72,7 +97,8 @@ var imageData = [
         macaroni: {
             needed: false
         },
-        spotlights: [paramACircle(430, 600, 200, 400)]
+        //spotlights: [paramACircle(430, 600, 200, 400)]
+        spotlights: [volSpot]
     }, {
         name: "ice",
         label: "Ice",
