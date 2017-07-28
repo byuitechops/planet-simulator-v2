@@ -23,11 +23,13 @@ function paramACircle(x, y, width, height) {
     }
     return pointsOut;
 }
+
+function fixPoints(point) {
+    point[0] = Math.round(point[0] * 0.75);
+    point[1] = Math.round(point[1] * 0.75);
+}
+
 var spot = [[729, 473], [733, 451], [756, 442], [775, 445], [826, 490], [884, 566], [923, 649], [935, 757], [922, 847], [887, 937], [838, 1007], [776, 1062], [752, 1065], [736, 1050], [731, 1033], [739, 1011], [797, 963], [838, 904], [864, 840], [873, 759], [863, 666], [832, 594], [787, 538], [739, 493]];
-spot.forEach(function (point) {
-    point[0] *= 0.75;
-    point[1] *= 0.75;
-})
 
 
 var volSpot = [[576.7, 595.1],
@@ -53,12 +55,11 @@ var volSpot = [[576.7, 595.1],
                     [385.6, 696],
                     [324.4, 616.7],
                     [389.3, 539.2],
-                    [483, 567.2]]
-volSpot.forEach(function (point) {
-    point[0] *= 0.75;
-    point[1] *= 0.75;
-})
+                    [483, 567.2]];
 
+spot.forEach(fixPoints)
+volSpot.forEach(fixPoints);
+console.log("JSON.stringify(spot):", JSON.stringify(spot));
 var imageData = [
     {
         name: "sea",
