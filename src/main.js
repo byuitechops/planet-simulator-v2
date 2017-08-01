@@ -505,20 +505,34 @@ class SpotlightStage {
      *	  blackVeil  {svg}     - The big black box that blackens everything
      */
     constructor() {
-        // Initalize our array
-        this.spotlights = draw.mask().attr('name', 'spotlights').add(draw.rect(draw.width(), draw.height()).fill('#fff'))
+        //this mask works just like in photoshop, draws the white portion
+        this.mask = draw.mask().attr('name', 'spotlights').add(draw.rect(draw.width(), draw.height()).fill('#fff'))
+        // Initalize our group
+        this.spotlights = draw.group();
         this.isActive = false
-        this.blackVeil = draw.rect(draw.width(), draw.height()).attr('visibility', 'hidden').maskWith(this.spotlights)
+        this.blackVeil = draw.rect(draw.width(), draw.height()).attr('visibility', 'hidden').maskWith(this.mask)
         this.gradient = draw.gradient('radial', function (stop) {
             stop.at(.7, 'rgba(0,0,0,1)')
             stop.at(1, 'rgba(0,0,0,0)')
         })
+
+        //add a filter to the group to make all the spots fuzy
+        this.spotlights.filter(function (add) {
+            add.gaussianBlur(10)
+        });
+
         //count the total possible spotlights
         this.numSpotlights = imageData.reduce((sum, image) => sum + image.spotlights.length, 0)
+
+
         //make them all
+        //each spotlight is black for the mask
         for (var i = 0; i < this.numSpotlights; i++) {
             this.createLight()
         }
+
+        //add the spotlight group to the mask
+        this.mask.add(this.spotlights);
     }
 
     /* called when they want to start the show */
@@ -547,13 +561,12 @@ class SpotlightStage {
             }, []);
 
             // turn off lights that aren't needed
-            this.turnOffLight(this.spotlights.children().filter(node => node.opacity()).length - spotsNeeded.length - 1)
+            this.turnOffLight(this.spotlights.children().filter(node => node.opacity()).length - spotsNeeded.length)
 
             //move all the spots to their correct spot
             spotsNeeded.forEach((spot, i) => {
                 //var targ = AO.imageData.spotlights[0]
-                //i +1 because the first child is the rect that is masked
-                this.spotlights.children()[i + 1].animate(ANIMATION_DURATION)
+                this.spotlights.children()[i].animate(ANIMATION_DURATION)
                     .opacity(1)
                     .plot(spot)
                     .after(() => resolve(AOarray))
@@ -564,7 +577,8 @@ class SpotlightStage {
     /* add a spotlight to our array */
     createLight() {
         // initalize a new spotlight in center of screen and add it
-        this.spotlights.add(draw.polygon(paramACircle(draw.width() / 2, draw.height() / 2, 100, 100)).fill(this.gradient).opacity(0))
+        //each spotlight is black for the mask to work
+        this.spotlights.add(draw.polygon(paramACircle(draw.width() / 2, draw.height() / 2, 100, 100)).fill('black').opacity(0))
     }
 
     /* remove a spotlight from our array */
@@ -657,4 +671,4 @@ function drawSpotLightOutlines() {
         })
     })
 }
-drawSpotLightOutlines();
+//drawSpotLightOutlines();
