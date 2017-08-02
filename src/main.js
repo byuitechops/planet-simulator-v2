@@ -2,7 +2,7 @@
 /*eslint no-console:0, no-unused-vars:0*/
 /*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime, paramACircle*/
 
-const ANIMATION_DURATION = 100;
+const ANIMATION_DURATION = 1000;
 
 
 // START
@@ -98,7 +98,6 @@ class Main {
     // allow me to press numbers to go to time period
     bindInput() {
         $(window).keydown(function (e) {
-            e.preventDefault(); // we are selfish
             if (e.which >= 49 && e.which <= 53)
                 this.onClick(e.which - 49)
             return;
@@ -270,7 +269,6 @@ class TimePeriodTransition {
 
         // cause arrow keys are cool
         $(document).keydown(function (e) {
-            e.preventDefault(); // we are selfish
             if (e.which == 39)
                 this.goToNext()
             else if (e.which == 37 && this.currentIndex != 0)
@@ -511,10 +509,6 @@ class SpotlightStage {
         this.spotlights = draw.group();
         this.isActive = false
         this.blackVeil = draw.rect(draw.width(), draw.height()).attr('visibility', 'hidden').maskWith(this.mask)
-        this.gradient = draw.gradient('radial', function (stop) {
-            stop.at(.7, 'rgba(0,0,0,1)')
-            stop.at(1, 'rgba(0,0,0,0)')
-        })
 
         //add a filter to the group to make all the spots fuzy
         this.spotlights.filter(function (add) {
@@ -538,7 +532,7 @@ class SpotlightStage {
     /* called when they want to start the show */
     dimLights() {
         // do the magic to add the mask filter
-        this.blackVeil.attr('visibility', 'visable').opacity(0).animate(ANIMATION_DURATION).opacity(.6)
+        this.blackVeil.attr('visibility', 'visible').opacity(0).animate(ANIMATION_DURATION).opacity(.6)
         this.isActive = true;
     }
 
