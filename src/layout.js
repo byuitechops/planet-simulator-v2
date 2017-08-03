@@ -8,17 +8,13 @@ var shadow = function (add) {
     var blur = add.offset(2, 2).in(add.sourceAlpha).gaussianBlur(4)
     add.blend(add.source, blur)
 }
-var gradient = draw.gradient('linear', function (stop) {
-    stop.at(.2, '#000')
-    stop.at(.5, '#fff')
-}).from(0, 0).to(0, 1)
 
-var background = draw.group()
+var background = draw.group().attr('name', 'background')
 layoutData.background.forEach(img => {
     background.add(draw.image(img.ref, img.width, img.height).x(img.x).y(img.y))
 })
 
-var forcers = draw.group()
+var forcers = draw.group().attr('name', 'background')
 layoutData.forcers.forEach((seg, i) => {
     var group = draw.group()
     seg.forEach(elm => {
@@ -35,31 +31,69 @@ forcers.x(272).y(110)
 
 var mac = imageData[imageData.length - 1]
 
+//make the masks gradient
+var gradientUnderwaterVolcano, gradientInsolation, maskUnderwaterVolcano, maskInsolation;
+gradientInsolation = draw.gradient('linear', function (stop) {
+    stop.at(.2, '#000')
+    stop.at(.4, '#fff')
+}).from(0, 0).to(0, 1)
+
+gradientUnderwaterVolcano = draw.gradient('linear', function (stop) {
+    stop.at(0.2, '#000')
+    stop.at(0.3, '#fff')
+}).from(0, 0).to(0, 1)
+
+
+
 
 //place all the pictures
 imageData.forEach(elm => {
-    elm.handle = draw.group().attr('name', elm.name)
     var i;
+
+    //make the group that the images will be put in
+    elm.handle = draw.group().attr('name', elm.name);
+
+    //add the masks to the group if needed
+    if (elm.name == "underwaterVolcano") {
+        maskUnderwaterVolcano = draw.mask()
+            .attr('name', 'maskUnderwaterVolcano')
+            .add(draw.rect(elm.width, elm.height).x(elm.x).y(elm.y).scale(elm.scale.x, elm.scale.y).fill(gradientUnderwaterVolcano));
+
+        elm.handle.maskWith(maskUnderwaterVolcano);
+    } else if (elm.name == "insolation") {
+        maskInsolation = draw.mask()
+            .attr('name', 'maskInsolation')
+            .add(draw.rect(elm.width, elm.height).x(0).y(elm.y).scale(elm.scale.x, elm.scale.y).fill(gradientInsolation));
+
+        elm.handle.maskWith(maskInsolation);
+    }
+
     // for each image in the folder
     for (i = 1; i <= elm.items; i++) {
-        var mask;
         var frame = draw.image(elm.path + i + elm.ext, elm.width, elm.height)
-            .x(elm.x).y(elm.y).scale(elm.scale.x, elm.scale.y).data('frame', i - 1).opacity(0).data('macaroni', 'false')
-        if (elm.name == "underwaterVolcano") {
-            mask = draw.mask().add(draw.rect(elm.width, elm.height).x(elm.x).y(elm.y).scale(elm.scale.x, elm.scale.y).fill(gradient))
-            frame.maskWith(mask)
-        } else if (elm.name == "insolation") {
-            mask = draw.mask().add(draw.rect(elm.width, elm.height).x(0).y(elm.y).scale(elm.scale.x, elm.scale.y).fill("#FFF"))
-            frame.maskWith(mask)
-        }
+            .opacity(0)
+            .x(elm.x)
+            .y(elm.y)
+            .scale(elm.scale.x, elm.scale.y)
+            .data('frame', i - 1)
+            .data('macaroni', 'false');
+
         elm.handle.add(frame)
     }
+
     if (elm.macaroni.needed) {
         for (i = 1; i <= elm.items; i++) {
             var macaroni = draw.image(mac.path + i + mac.ext, mac.width, mac.height)
-                .x(elm.macaroni.x).y(elm.macaroni.y).data('frame', i - 1).opacity(0).data('macaroni', 'true')
+                .x(elm.macaroni.x)
+                .y(elm.macaroni.y)
+                .data('frame', i - 1)
+                .opacity(0)
+                .data('macaroni', 'true')
+
             if (elm.macaroni.mirrored)
                 macaroni.scale(-1, 1)
+
+
             elm.handle.add(macaroni)
         }
     }
@@ -94,25 +128,27 @@ layoutData.timeline.forEach((seg, i) => {
     time.x(layoutData.timelinePlacement[i]).data('phase', i)
     time.children()[2].filter(shadow)
     time.children()[0].opacity(0)
+    var permafilter = draw.filter(function (add) {
+        add.componentTransfer({
+            rgb: {
+                type: 'linear',
+                slope: 0.7
+            }
+        })
+    })
     time.on("mouseover", function () {
         if (!this.data('selected')) {
-            this.filter(function (add) {
-                add.componentTransfer({
-                    rgb: {
-                        type: 'linear',
-                        slope: 0.7
-                    }
-                })
-            })
+            this.filter(permafilter)
             $('body').css('cursor', 'pointer')
         }
     })
     time.on("mouseout", function () {
-        this.unfilter(true)
+        this.unfilter()
         $('body').css('cursor', 'auto')
     })
     timeline.add(time)
-})
+});
+
 timeline.x(147).y(204).scale(1, 1.2)
 
 function highlightTime(time) {
