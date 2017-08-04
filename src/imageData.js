@@ -44,7 +44,7 @@ var imageData = [
         macaroni: {
             needed: false
         },
-        spotlights: [paramACircle(427, 600, 440, 300)],
+        spotlights: [paramACircle(420, 595, 340, 250)],
     }, {
         name: "volcano",
         label: "Volcanic Activity",
@@ -84,8 +84,8 @@ var imageData = [
             needed: false
         },
         spotlights: [
-            paramACircle(428, 410, 400, 200),
-            paramACircle(428, 700, 400, 200)
+            paramACircle(428, 415, 300, 125),
+            paramACircle(428, 720, 300, 90)
         ]
     }, {
         name: "insolation",
