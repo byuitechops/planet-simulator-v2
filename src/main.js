@@ -503,17 +503,20 @@ class SpotlightStage {
      *	  blackVeil  {svg}     - The big black box that blackens everything
      */
     constructor() {
-        //this mask works just like in photoshop, draws the white portion
-        this.mask = draw.mask().attr('name', 'spotlights').add(draw.rect(draw.width(), draw.height()).fill('#fff'))
-        // Initalize our group
-        this.spotlights = draw.group();
-        this.isActive = false
-        this.blackVeil = draw.rect(draw.width(), draw.height()).attr('visibility', 'hidden').maskWith(this.mask)
-
         //can't just add the filter to the group because firefox wiggs out but works if we add it to the spots directly
         //build the filter we will add to each of the spots
         this.filter = new SVG.Filter();
         this.filter.gaussianBlur(10);
+        draw.defs().add(this.filter);
+        this.filter.attr('name', 'blurForSpotlights');
+
+        //this mask works just like in photoshop, draws the white portion
+        this.mask = draw.mask().attr('name', 'spotlightsMask').add(draw.rect(draw.width(), draw.height()).fill('#fff'))
+        // Initalize our group
+        this.spotlights = draw.group().attr('name', 'spotlights');
+        this.isActive = false
+        this.blackVeil = draw.rect(draw.width(), draw.height()).attr('visibility', 'hidden').maskWith(this.mask)
+
 
 
         //count the total possible spotlights
