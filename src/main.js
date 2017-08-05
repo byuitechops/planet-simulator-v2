@@ -1,6 +1,6 @@
 /*eslint-env es6, browser*/
 /*eslint no-console:0, no-unused-vars:0*/
-/*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime, paramACircle*/
+/*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime, paramACircle, SVG*/
 
 const ANIMATION_DURATION = 1000;
 
@@ -510,10 +510,11 @@ class SpotlightStage {
         this.isActive = false
         this.blackVeil = draw.rect(draw.width(), draw.height()).attr('visibility', 'hidden').maskWith(this.mask)
 
-        //add a filter to the group to make all the spots fuzy
-        this.spotlights.filter(function (add) {
-            add.gaussianBlur(10)
-        });
+        //can't just add the filter to the group because firefox wiggs out but works if we add it to the spots directly
+        //build the filter we will add to each of the spots
+        this.filter = new SVG.Filter();
+        this.filter.gaussianBlur(10);
+
 
         //count the total possible spotlights
         this.numSpotlights = imageData.reduce((sum, image) => sum + image.spotlights.length, 0)
@@ -572,7 +573,13 @@ class SpotlightStage {
     createLight() {
         // initalize a new spotlight in center of screen and add it
         //each spotlight is black for the mask to work
-        this.spotlights.add(draw.polygon(paramACircle(draw.width() / 2, draw.height() / 2, 100, 100)).fill('black').opacity(0))
+        var tempSpot = draw.polygon(paramACircle(draw.width() / 2, draw.height() / 2, 100, 100));
+        tempSpot
+            .fill('black')
+            .opacity(0)
+            .filter(this.filter);
+
+        this.spotlights.add(tempSpot);
     }
 
     /* remove a spotlight from our array */
