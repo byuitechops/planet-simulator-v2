@@ -75,19 +75,19 @@ body {
 }
 
 #message {
-    font-size: 14pt;
+    font-size: 13pt;
     margin: 3px;
     margin-top: 5px;
 }
 
 h3 {
-    font-size: 16pt;
+    font-size: 14pt;
     margin: 3px;
     display: inline;
 }
 
 #details {
-    font-size: 16pt;
+    font-size: 14pt;
     margin-left: 2vw;
     color: #888
 }
