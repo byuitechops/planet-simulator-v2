@@ -195,12 +195,6 @@ var layoutData = {
             x: 1503,
             y: 601,
             font: []
-        },
-        {
-            text: "CLIMATE SIMULATOR 7.5",
-            x: 136,
-            y: 853,
-            font: []
         }
 	],
     timeline: [
