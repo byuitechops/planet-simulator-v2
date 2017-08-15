@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1730"
+   height="938"
+   viewBox="0 0 1730 938"
+   version="1.1"
+   id="svg3684"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="sedimentElipse.svg">
+  <defs
+     id="defs3678" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="517.07324"
+     inkscape:cy="430.51907"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3681">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <image
+       sodipodi:absref="C:\Users\kmwhitt\Documents\Work\planet-simulator-v2\images\paper-doll\background2.jpg"
+       xlink:href="background2.jpg"
+       y="0.61224365"
+       x="0"
+       id="image3694"
+       preserveAspectRatio="none"
+       height="937.38776"
+       width="1730.562"
+       sodipodi:insensitive="true" />
+    <ellipse
+       id="path3697"
+       cx="1059.9497"
+       cy="632.55371"
+       rx="71.879105"
+       ry="83.434265"
+       style="fill:none;stroke:#000000;stroke-width:1.10649359;stroke-opacity:1"
+       inkscape:label="path3697" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.75017571px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 428.36623,451.30679 495.2819,432.40236 556.48329,423.42292 602.47231,482.59559 564.89821,504.04415 527.46389,534.76842 506.01857,564.07171 500.63405,608.37796 519.1472,663.14023 518.40619,695.05508 520.59575,735.95585 490.59575,750.24155 458.179,757.47942 418.7613,758.69962 383.24127,753.62439 374.82634,702.68745 371.28488,668.87127 379.90543,617.12209 372.1295,561.65117 341.40467,528.01684 292.1505,502.71381 249.09689,474.65345 290.64043,419.37197 358.07476,430.37689 Z"
+       id="path12"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccccccccccccccccc" />
+  </g>
+</svg>

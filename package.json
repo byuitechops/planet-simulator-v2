@@ -1,25 +1,27 @@
 {
-  "name": "planet-simulator-v2",
-  "version": "1.0.0",
-  "description": "Rule the world",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src -d lib",
-    "watch": "babel src --watch -d lib"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/byuitechops/planet-simulator-v2.git"
-  },
-  "bugs": {
-    "url": "https://github.com/byuitechops/planet-simulator-v2/issues"
-  },
-  "homepage": "https://github.com/byuitechops/planet-simulator-v2#readme",
-  "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-preset-env": "^1.4.0"
-  },
-  "author": "Benjamin Earl",
-  "license": "ISC"
-}
+    "name": "planet-simulator-v2",
+    "version": "1.0.0",
+    "description": "Rule the world",
+    "main": "main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "babel src -d lib",
+        "watch": "babel src --watch -d lib"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/byuitechops/planet-simulator-v2.git"
+    },
+    "bugs": {
+        "url": "https://github.com/byuitechops/planet-simulator-v2/issues"
+    },
+    "homepage": "https://github.com/byuitechops/planet-simulator-v2#readme",
+    "devDependencies": {
+        "babel-cli": "^6.24.1",
+        "babel-preset-env": "^1.4.0",
+        "uri": "1.18.12",
+    },
+    {
+        "author": "Benjamin Earl",
+        "license": "ISC"
+    }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   width="1730"
+   height="938"
+   viewBox="0 0 1730 938"
+   sodipodi:docname="background1.1.svg"
+   inkscape:version="0.92.1 r15371">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     id="namedview4"
+     showgrid="false"
+     inkscape:zoom="1.3132948"
+     inkscape:cx="436.38124"
+     inkscape:cy="362.34911"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <image
+     sodipodi:absref="C:\Users\kmwhitt\Documents\Work\planet-simulator-v2\images\paper-doll\background.png"
+     xlink:href="background.png"
+     sodipodi:insensitive="true"
+     y="0"
+     x="0"
+     id="image10"
+     preserveAspectRatio="none"
+     height="938"
+     width="1730" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 262.69806,449.15317 293.15581,467.42782 306.86179,479.61092 323.61355,484.17959 354.83275,492.55546 384.52905,516.16021 402.80369,553.47095 411.17957,585.45158 421.07834,609.81778 428.69278,634.94542 425.64701,679.87059 401.28081,704.99824 386.81339,720.22711 374.63029,734.69456 360.16286,749.92341 336.5581,756.01497 292.39436,728.60299 247.46919,674.54049 223.86443,617.43222 220.43794,584.30942 217.01144,551.18662 226.14876,493.3169 239.09331,467.42782 Z"
+     id="path12"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccccccccccccccccccc" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 592.40317,462.09771 559.66109,477.32659 524.63468,489.50968 508.26364,499.40845 499.50704,515.39877 486.5625,545.09507 477.04445,566.79622 466.00352,585.45159 466.76497,607.15273 469.81074,630.37676 478.94807,659.31162 475.90229,695.09948 484.27817,723.27289 501.79137,736.59815 522.35035,736.21743 552.8081,727.84155 568.41769,711.47051 584.02729,695.09947 606.8706,663.88028 622.86092,628.85387 630.47535,598.39613 631.99824,557.27817 622.86092,516.16021 616.00792,488.74824 Z"
+     id="path16"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccccccccccccccccccccccc" />
+</svg>

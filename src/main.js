@@ -2,7 +2,7 @@
 /*eslint no-console:0, no-unused-vars:0*/
 /*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime, paramACircle, SVG*/
 
-const ANIMATION_DURATION = 1000;
+const ANIMATION_DURATION = 100;
 
 
 // START
@@ -676,3 +676,8 @@ function drawSpotLightOutlines() {
     })
 }
 //drawSpotLightOutlines();
+
+//var fixV = imageData[1].spotlights[0].map(function (spotPoint) {
+//    return [Math.round(spotPoint[0]), Math.round(spotPoint[1])]
+//})
+//console.log(JSON.stringify(fixV));

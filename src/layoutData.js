@@ -41,6 +41,13 @@ var layoutData = {
             y: 0
         },
         {
+            color: '#fff',
+            width: 88,
+            height: 87,
+            x: 38,
+            y: 770,
+        },
+        {
             ref: "images/paper-doll/waves.gif",
             width: 460,
             height: 250,
@@ -347,5 +354,5 @@ var layoutData = {
                 y: 75
             }]
 	],
-    forcersPlacement: [[-10, 0], [95, 0], [195, 0], [323, 0], [452, 0]]
+    forcersPlacement: [[-10, 0], [95, 0], [195, 0], [323, 0], [452, 0]],
 }

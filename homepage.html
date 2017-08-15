@@ -15,34 +15,37 @@
                 <div class="row space-4">
                     <div class="innerwrap col-xs-12">
                         <div class="row" style="margin-top:15px;">
-                            {{#each this}}
+                            {{#each csvData}}
                             <div class="col-lg-3 col-md-6">
-                            {{#if icon}}
+                                {{#if icon}}
                                 <div class="button" style="background-image:url(images/paper-doll/{{icon}})">
-                            {{else}}  
-                                <div class="button">
-                            {{/if}}
-                                    <a href="index.html?file={{url}}" target="_blank">
-                                        <p>{{linkName}}</p>
-                                    </a>
+                                    {{else}}
+                                    <div class="button">
+                                        {{/if}}
+                                        <a href="index.html?file={{url}}&home={{../queryData.file}}" target="_blank">
+                                            <p>{{linkName}}</p>
+                                        </a>
+                                    </div>
                                 </div>
+                                {{/each}}
                             </div>
-                            {{/each}}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </script>
     <!-- HANDLEBARS and JQUERY-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-dsv/1.0.3/d3-dsv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.12/URI.min.js"></script>
+
 
     <!-- BOOTSTRAP imports -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 
     <style>
         body {
@@ -50,12 +53,12 @@
             background: linear-gradient(black, black, rgb(50, 121, 128), rgb(50, 121, 128));
             background-attachment: fixed;
         }
-
+        
         h1,
         h2 {
             font-family: 'arial';
         }
-
+        
         h1 {
             color: white;
             font-size: 50px;
@@ -66,19 +69,19 @@
             border: 0px solid rgb(57, 135, 144);
             /*background:linear-gradient( 0deg, rgba(47, 118, 125, 1), rgba(47, 118, 125, 0) );*/
         }
-
+        
         h2 {
             color: white;
             margin-bottom: 20px;
             text-shadow: rgba(0, 0, 0, 1) 3px 3px 6px;
         }
-
+        
         .innerwrap {
             box-sizing: border-box;
             border: 10px solid rgba(47, 118, 125, 1);
             background-color: rgba(57, 135, 144, 0.9);
         }
-
+        
         .button {
             margin-bottom: 30px;
             background-color: rgb(35, 82, 85);
@@ -88,7 +91,14 @@
             position: relative;
             min-height: 100px;
         }
-
+        /* makes the error message readable and look important */
+        
+        #errorMessage {
+            font-size: 3.2em;
+            color: #FCE40C;
+            text-align: center;
+        }
+        
         .button p {
             font-family: 'arial';
             font-size: 20px;
@@ -96,7 +106,7 @@
             color: white;
             text-shadow: rgb(0, 0, 0) 1px 1px 5px;
         }
-
+        
         .button a {
             display: inline-block;
             height: 100%;
@@ -104,15 +114,16 @@
             text-decoration: none;
             padding: 15px;
         }
-
+        
         .button a:hover p {
             text-shadow: rgb(0, 0, 0) 5px 5px 5px;
         }
-
+        
         .space-4 {
             margin-bottom: 30px;
         }
-
+        /*        add error css to be big, colored and centered */
+        
         .background {
             height: 100%;
             width: 100%;
@@ -125,7 +136,7 @@
             /*-webkit-animation: thefinalfrontier 30s linear infinite;   NO SCROLLING ANIMATION*/
             /*animation: thefinalfrontier 30s linear infinite;*/
         }
-
+        
         @-webkit-keyframes thefinalfrontier {
             from {
                 background-position: 0 0;
@@ -134,7 +145,7 @@
                 background-position: -1680px 0;
             }
         }
-
+        
         @keyframes thefinalfrontier {
             from {
                 background-position: 0 0;
@@ -145,14 +156,20 @@
         }
 
     </style>
-
     <div id="results">
-        output results here.
+
+    </div>
+
+    <div id='errorMessage'>
+
     </div>
     <!--    <script src="getCSV.js"></script>-->
 
 
     <script>
+        var queryData = new URI(window.location.href).search(true);
+        console.log(queryData);
+
         function parsingFunc(d) {
             "use strict";
 
@@ -167,17 +184,19 @@
             };
         }
 
-        function callbackForGetCSV(err, csvData) {
+        function callbackForGetCSV(err, templateData) {
             "use strict";
             var forcerObj;
             if (err) {
                 console.log("error:", err);
                 $("#error").toggleClass("hide");
                 $("svg").toggleClass("hide");
+                // unorthodox, but it works without messing with the homepage layout
+                document.getElementById("errorMessage").innerHTML = "<br> <br> <br> <br>" + '"' + window.location + '"' + " does not exist. <br> Please inform your instructor that this URL does not work."
                 return;
             }
-            console.log("scenario:", csvData);
-            init(csvData);
+            console.log("templateData:", templateData);
+            init(templateData);
         }
 
 
@@ -206,13 +225,14 @@
                     ajaxCallback(errorText, null);
                 }
 
+
             });
         }
 
-        function init(csvData) {
+        function init(templateData) {
             var tpl_source = $("#item_tmpl").html();
             var h = Handlebars.compile(tpl_source);
-            var content = h(csvData);
+            var content = h(templateData);
             //console.log(content);
             // output
             var results = document.getElementById("results");
@@ -225,30 +245,36 @@
         }
 
         //MAKE IT HAPPEN CAP'N
-        function getCSV(callback) {
+        function getCSV(queryData, callback) {
 
-            var fileName = getFileNameFromURL();
+            var fileName = queryData.file,
+                templateData;
 
             if (!fileName) {
-                callBack("No filename in URL.", null);
+                callback("No filename in URL.", null);
                 return;
             }
 
             ajaxFile(fileName, function(error, fileText) {
-                var fileDataRaw;
+                var csvData;
 
                 if (error) {
-                    callBack(error, null);
+                    callback(error, null);
                     return;
                 }
 
-                fileDataRaw = parseNewCSV(fileText, parsingFunc);
+                csvData = parseNewCSV(fileText, parsingFunc);
 
-                callback(null, fileDataRaw);
+                templateData = {
+                    queryData: queryData,
+                    csvData: csvData
+                }
+
+                callback(null, templateData);
             });
 
         }
-        getCSV(callbackForGetCSV);
+        getCSV(queryData, callbackForGetCSV);
 
     </script>
 </body>

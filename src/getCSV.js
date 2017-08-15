@@ -6,9 +6,8 @@ window.getCSV = (function () {
 
     function getFileNameFromURL() {
         //This assumes that there will only be one parameter and it doesn't matter what it is
-        var fileName = window.location.search
-            .substr(1)
-            .split("=")[1];
+        var fileName = new URI(window.location.href).search(true).file;
+        console.log(fileName);
         return fileName;
     }
 
