@@ -191,7 +191,8 @@
                 console.log("error:", err);
                 $("#error").toggleClass("hide");
                 $("svg").toggleClass("hide");
-                // unorthodox, but it works without messing with the homepage layout
+
+                // needs work to look and sound better
                 document.getElementById("errorMessage").innerHTML = "<br> <br> <br> <br>" + '"' + window.location + '"' + " does not exist. <br> Please inform your instructor that this URL does not work."
                 return;
             }

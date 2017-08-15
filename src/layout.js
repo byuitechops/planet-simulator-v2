@@ -174,15 +174,11 @@ function highlightTime(time) {
     time.data('selected', true);
 }
 
-<<<<<<< Updated upstream
-highlightTime(timeline.children()[0]);
-=======
 highlightTime(timeline.children()[0])
 
-// add homepage link
-// needs more work
+// adds link homepage if the page came from there
+// needs work; implement URI. Also look into making the text underlined correctly
 if ((window.location.href).includes('&home=homepage')) {
     var backToHome = draw.text("Back to home").move(37, 19).fill('#FFFFFF').size(22, 50).font("color", 'red');
     backToHome.linkTo('http://127.0.0.1:54706/planet-simulator-v2/homepage.html?file=homepage');
 }
->>>>>>> Stashed changes
