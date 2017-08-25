@@ -4,6 +4,10 @@ body {
     box-sizing: border-box;
 }
 
+#SvgjsText1238 {
+    text-decoration: underline;
+}
+
 #descriptionBox {
     color: #FFF;
     font-family: 'Roboto Slab', serif;
