@@ -178,7 +178,9 @@ highlightTime(timeline.children()[0])
 
 // adds link homepage if the page came from there
 // needs work; implement URI. Also look into making the text underlined correctly
+// try using a conditional div and css in the homepage.html to get it how you want it
 if ((window.location.href).includes('&home=homepage')) {
     var backToHome = draw.text("Back to home").move(37, 19).fill('#FFFFFF').size(22, 50).font("color", 'red');
-    backToHome.linkTo('http://127.0.0.1:54706/planet-simulator-v2/homepage.html?file=homepage');
+    var homey = window.location;
+    backToHome.linkTo(homey);
 }
