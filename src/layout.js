@@ -176,10 +176,9 @@ function highlightTime(time) {
 
 highlightTime(timeline.children()[0])
 
-// adds link homepage if the page came from there
-// needs work; implement URI?
+// adds link to homepage if that's where the user came from
 if ((window.location.href).includes('&home=homepage')) {
     var backToHome = draw.text("Back to home").move(37, 19).fill('#FFFFFF').size(22, 50).font("color", 'red');
-    var homey = new URI(window.location);
-    backToHome.linkTo(homey);
+    var linkHome = "homepage.html?file=homepage"
+    backToHome.linkTo(linkHome);
 }
