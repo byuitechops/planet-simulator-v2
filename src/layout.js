@@ -65,7 +65,7 @@ imageData.forEach(elm => {
     } else if (elm.name == "insolation") {
         maskInsolation = draw.mask()
             .attr('name', 'maskInsolation')
-            .add(draw.rect(elm.width, elm.height).x(20).y(elm.y).scale(elm.scale.x, elm.scale.y).fill(gradientInsolation));
+            .add(draw.rect(elm.width, elm.height).x(0).y(elm.y).scale(elm.scale.x, elm.scale.y).fill(gradientInsolation));
 
         elm.handle.maskWith(maskInsolation);
     }
