@@ -127,6 +127,7 @@ class Animator {
         // create an instance of the Text Controller
         this.txtControl = new TextController()
         this.txtControl.setTimePeriod(this.currentTP)
+        this.txtControl.displayInstructions()
         this.animatedObjects = []
 
         // create all the animated Objects
@@ -180,6 +181,7 @@ class Animator {
         } else {
             this.setState(newTP)
             this.txtControl.setTimePeriod(newTP)
+            this.txtControl.displayInstructions()
             this.callback()
         }
 
@@ -200,6 +202,7 @@ class Animator {
         // disable the txtBox
         this.txtControl.removeText()
         this.txtControl.setTimePeriod(this.currentTP)
+        this.txtControl.displayInstructions()
         this.txtControl.disable()
 
         this.callback()
@@ -613,12 +616,16 @@ class TextController {
     displayText(AOarray) {
         return new Promise((resolve, reject) => {
             // display the text
+            console.log(AOarray[0].TPdata[this.currentTP])
             $("#message").text(AOarray[0].TPdata[this.currentTP].text)
             document.getElementById("details").innerHTML = `${AOarray[0].imageData.label} <span>${AOarray[0].TPdata[AOarray[0].currentState].value+1} to ${AOarray[0].TPdata[this.currentTP].value+1}</span>`
             resolve(AOarray)
         })
     }
 
+    displayInstructions(){
+        $("#message").text("Click on a time period above")
+    }
     /* removes the text from the text box */
     removeText(animatedObjectArray) {
         return new Promise((resolve, reject) => {
