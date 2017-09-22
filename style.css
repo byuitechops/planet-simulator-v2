@@ -12,6 +12,7 @@ body {
     font-family: 'Roboto Slab', serif;
 }
 
+/* for the future box that will hold all the homepage stuff */
 #pageContent>div {
     width: 1730px;
     margin: auto;
