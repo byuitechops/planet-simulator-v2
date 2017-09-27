@@ -12,11 +12,13 @@ body {
     font-family: 'Roboto Slab', serif;
 }
 
-/* for the future box that will hold all the homepage stuff */
+/* for the future box that will hold all the homepage content */
+/*
 #pageContent>div {
     width: 1730px;
     margin: auto;
 }
+*/
 
 #descriptionBox {
     color: #FFF;
