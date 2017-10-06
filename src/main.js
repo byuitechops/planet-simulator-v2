@@ -623,7 +623,7 @@ class TextController {
         })
     }
 
-    displayInstructions(){
+    displayInstructions() {
         $("#message").text("Click on a time period above")
     }
     /* removes the text from the text box */
@@ -682,7 +682,18 @@ function drawSpotLightOutlines() {
         })
     })
 }
+
 //drawSpotLightOutlines();
+
+function drawViewBoxOutline() {
+    draw.rect(1639, 888).move(30, 20).fill('none').stroke({
+        color: '#f06',
+        width: 3
+    });
+}
+
+drawViewBoxOutline();
+
 
 //var fixV = imageData[1].spotlights[0].map(function (spotPoint) {
 //    return [Math.round(spotPoint[0]), Math.round(spotPoint[1])]
