@@ -19,9 +19,8 @@
     "devDependencies": {
         "babel-cli": "^6.24.1",
         "babel-preset-env": "^1.4.0",
-        "uri": "1.18.12",
+        "uri": "1.18.12"
     },
-    {
-        "author": "Benjamin Earl",
-        "license": "ISC"
-    }
+    "author": "Benjamin Earl",
+    "license": "ISC"
+}
