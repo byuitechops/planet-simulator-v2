@@ -1,6 +1,6 @@
 body {
     background-color: #0b1312;
-    margin: 5px auto;
+    margin: 0px auto;
     box-sizing: border-box;
 }
 
@@ -16,38 +16,28 @@ body {
     color: #FFF;
     font-family: 'Roboto Slab', serif;
     display: flex;
-    width: 89%;
-    max-width: 1140px;
-    margin: 20px auto;
-    display: flex;
+    height: 300px;
 }
 
 #descriptionBox div {
-    background-color: #181818;
-    border: 5px #297082 solid;
-    color: #FFF;
-    font-family: 'Roboto Slab', serif;
     padding: 10px;
-    margin: 5px;
 }
 
 #content {
     width: 85%;
     padding-right: 20px;
-    margin-right: 0px!important;
 }
 
-#buttons {
+#descriptionBox #buttons {
     display: flex;
     flex-grow: 1;
-    flex-direction: row-reverse;
+    flex-direction: column;
     flex-wrap: wrap;
     display: flex;
     align-items: flex-start;
     align-content: flex-start;
-    justify-content: flex-end;
-    margin-left: 0px!important;
-    border-left: 0px!important;
+    justify-content: center;
+    border-left: 5px solid #2F767D;
 }
 
 #next,
@@ -56,7 +46,7 @@ body {
     background-color: #181818;
     border: 1px solid #d8d8d8;
     padding: 6px 8px;
-    margin: 3px;
+    margin: 3px 0;
     font-size: 14pt;
     color: #d8d8d8;
     cursor: pointer;
@@ -104,12 +94,8 @@ h3 {
 }
 
 svg {
-    width: 100%;
-    max-width: 1170px;
     margin: 0 auto;
-    height: 70vh;
-    max-height: 50vw;
-    display: block;
+
     /* the following is code from "https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting-using-css" to stop highlighting */
     -webkit-touch-callout: none;
     /* iOS Safari */
@@ -127,4 +113,31 @@ svg {
 
 span span {
     margin-left: 20px;
+}
+
+#wrapper {
+    width: 100%;
+    max-width: 1170px;
+    margin: 50px auto 0;
+    /* height: 100vh; */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    border: 5px solid #2F767D;
+    /* padding: 3px; */
+    
+}
+
+#drawing {
+    /* flex-grow: 1; */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* min-height: 675px; */
+}
+
+#descriptionBox {
+    height: 150px;
+    min-height: 150px;
 }

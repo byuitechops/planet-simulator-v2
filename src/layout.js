@@ -1,8 +1,23 @@
 /*eslint-env es6, browser*/
 /*eslint no-console:0, semi: ["error", "always"] */
 /*global SVG, $, imageData, layoutData*/
-var draw = SVG('drawing').size(1730, 938);
-$('svg').attr('viewBox', '0 0 1730 938');
+var size = {
+    width: 1730,
+    height: 938,
+    vbWidth: 1600,
+    vbX: 50,
+    vbY: 60
+};
+size.vbHeight = Math.round(size.vbWidth * size.height / size.width);
+
+var draw = SVG('drawing')
+    // .size(size.width + "px", size.hight + "px")
+    .viewbox(size.vbX, size.vbY, size.vbWidth, size.vbHeight);
+
+    //set the overflow attribute on the svg element
+    draw.node.setAttribute("overflow", "hidden");
+    draw.node.setAttribute("preserveAspectRatio", "xMidYMid slice");
+
 
 //drop shadow filter used on text and other things
 var shadow = new SVG.Filter();
@@ -23,7 +38,7 @@ layoutData.forcers.forEach((seg, i) => {
         if (elm.ref)
             group.add(draw.image(elm.ref, elm.width, elm.height));
         else
-            group.add(draw.text(elm.text).x(elm.x).y(elm.y).font(layoutData.styling["forcer"]));
+            group.add(draw.text(elm.text).x(elm.x).y(elm.y).font(layoutData.styling['forcer']));
     });
     group.x(layoutData.forcersPlacement[i][0]).y(layoutData.forcersPlacement[i][1]).dy(-7);
     group.children()[1].opacity(0);
@@ -56,13 +71,13 @@ imageData.forEach(elm => {
     elm.handle = draw.group().attr('name', elm.name);
 
     //add the masks to the group if needed
-    if (elm.name == "underwaterVolcano") {
+    if (elm.name == 'underwaterVolcano') {
         maskUnderwaterVolcano = draw.mask()
             .attr('name', 'maskUnderwaterVolcano')
             .add(draw.rect(elm.width, elm.height).x(elm.x).y(elm.y).scale(elm.scale.x, elm.scale.y).fill(gradientUnderwaterVolcano));
 
         elm.handle.maskWith(maskUnderwaterVolcano);
-    } else if (elm.name == "insolation") {
+    } else if (elm.name == 'insolation') {
         maskInsolation = draw.mask()
             .attr('name', 'maskInsolation')
             .add(draw.rect(elm.width, elm.height).x(0).y(elm.y).scale(elm.scale.x, elm.scale.y).fill(gradientInsolation));
@@ -105,15 +120,15 @@ var text = draw.group().attr('name', 'Labels');
 layoutData.text.forEach(line => {
     text.add(
         line.font.reduce((sum, font) => sum.font(layoutData.styling[font]),
-            draw.text(line.text).x(line.x).y(line.y).font(layoutData.styling["normal"])
+            draw.text(line.text).x(line.x).y(line.y).font(layoutData.styling['normal'])
         )
     );
 });
 //CO2 meeter needs special attention 
 text.add(draw.text(add => {
-    add.tspan('CO').font(layoutData.styling["notBold"]);
-    add.tspan('2').dy(5).font(layoutData.styling["smallText"]);
-}).x(535).y(790).font(layoutData.styling["normal"]));
+    add.tspan('CO').font(layoutData.styling['notBold']);
+    add.tspan('2').dy(5).font(layoutData.styling['smallText']);
+}).x(535).y(790).font(layoutData.styling['normal']));
 
 text.dy(-7).children().forEach(child => child.filter(shadow));
 
@@ -139,20 +154,20 @@ layoutData.timeline.forEach((seg, i) => {
         if (elm.ref)
             time.add(draw.image(elm.ref, elm.width, elm.height));
         else
-            time.add(draw.text(elm.text).x(elm.x).y(12.5).font(layoutData.styling["normal"]).font(layoutData.styling["smallText"]));
+            time.add(draw.text(elm.text).x(elm.x).y(12.5).font(layoutData.styling['normal']).font(layoutData.styling['smallText']));
     });
     time.x(layoutData.timelinePlacement[i]).data('phase', i);
     time.children()[2].filter(shadow);
     time.children()[0].opacity(0);
 
 
-    time.on("mouseover", function () {
+    time.on('mouseover', function () {
         if (!this.data('selected')) {
             this.filter(darkenColor);
             $('body').css('cursor', 'pointer');
         }
     });
-    time.on("mouseout", function () {
+    time.on('mouseout', function () {
         this.unfilter();
         $('body').css('cursor', 'auto');
     });
@@ -174,11 +189,11 @@ function highlightTime(time) {
     time.data('selected', true);
 }
 
-highlightTime(timeline.children()[0])
+highlightTime(timeline.children()[0]);
 
 // adds link to homepage if that's where the user came from
 if ((window.location.href).includes('&home=homepage')) {
-    var backToHome = draw.text("Back to home").move(37, 19).fill('#FFFFFF').size(22, 50).font("color", 'red');
-    var linkHome = "homepage.html?file=homepage"
+    var backToHome = draw.text('Back to home').move(37, 19).fill('#FFFFFF').size(22, 50).font('color', 'red');
+    var linkHome = 'homepage.html?file=homepage';
     backToHome.linkTo(linkHome);
 }

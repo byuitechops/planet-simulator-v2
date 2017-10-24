@@ -511,7 +511,7 @@ class SpotlightStage {
         this.filter.attr('name', 'blurForSpotlights');
 
         //this mask works just like in photoshop, draws the white portion
-        this.mask = draw.mask().attr('name', 'spotlightsMask').add(draw.rect(draw.width(), draw.height()).fill('#fff'))
+        this.mask = draw.mask().attr('name', 'spotlightsMask').add(draw.rect(size.width, size.height).fill('#fff'))
         // Initalize our group
         this.spotlights = draw.group().attr('name', 'spotlights');
         this.isActive = false
@@ -576,7 +576,7 @@ class SpotlightStage {
     createLight() {
         // initalize a new spotlight in center of screen and add it
         //each spotlight is black for the mask to work
-        var tempSpot = draw.polygon(paramACircle(draw.width() / 2, draw.height() / 2, 100, 100));
+        var tempSpot = draw.polygon(paramACircle(size.vbWidth / 2 + size.vbX, size.vbHeight / 2 + size.vbY, 100, 100));
         tempSpot
             .fill('black')
             .opacity(0)
@@ -675,7 +675,15 @@ function drawSpotLightOutlines() {
         })
     })
 }
-//drawSpotLightOutlines();
+function drawBox() {
+    draw.rect(size.vbWidth, size.vbHeight).move(size.vbX, size.vbY).fill('none').stroke({
+        color: '#f06',
+        width: 4
+    });
+}
+
+// drawBox();
+// drawSpotLightOutlines();
 
 //var fixV = imageData[1].spotlights[0].map(function (spotPoint) {
 //    return [Math.round(spotPoint[0]), Math.round(spotPoint[1])]
