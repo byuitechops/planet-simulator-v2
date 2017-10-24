@@ -518,7 +518,7 @@ class SpotlightStage {
         // Initalize our group
         this.spotlights = draw.group().attr('name', 'spotlights');
         this.isActive = false
-        this.blackVeil = draw.rect(draw.width(), draw.height()).attr('visibility', 'hidden').maskWith(this.mask)
+        this.blackVeil = draw.rect(size.width, size.height).attr('name', 'spotlightsRect').attr('visibility', 'hidden').maskWith(this.mask)
 
 
 
@@ -689,18 +689,8 @@ function drawBox() {
     });
 }
 
-// drawBox();
+drawBox();
 // drawSpotLightOutlines();
-
-function drawViewBoxOutline() {
-    draw.rect(1639, 888).move(30, 20).fill('none').stroke({
-        color: '#f06',
-        width: 3
-    });
-}
-
-drawViewBoxOutline();
-
 
 //var fixV = imageData[1].spotlights[0].map(function (spotPoint) {
 //    return [Math.round(spotPoint[0]), Math.round(spotPoint[1])]
