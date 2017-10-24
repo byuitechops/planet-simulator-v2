@@ -12,9 +12,12 @@
         <div class="background">
             <div class="container">
                 <h1 class="row">Climate Simulator Home</h1>
-                <div class="row space-4">
-                    <div class="innerwrap col-xs-12">
-                        <div class="row" style="margin-top:15px;">
+                <div class="innerwrap" id="instructions">
+                    <h2>Click on the box below containing the scenario you want to study</h2>
+                </div>
+                <div class="innerwrap col-xs-12">
+                    <div class="row space-4">
+                        <div class="row" style="margin-top:15px; padding-right: 15px; padding-left: 15px;">
                             {{#each csvData}}
                             <div class="col-lg-3 col-md-6">
                                 {{#if icon}}
@@ -53,12 +56,12 @@
             background: linear-gradient(black, black, rgb(50, 121, 128), rgb(50, 121, 128));
             background-attachment: fixed;
         }
-        
+
         h1,
         h2 {
             font-family: 'arial';
         }
-        
+
         h1 {
             color: white;
             font-size: 50px;
@@ -69,19 +72,26 @@
             border: 0px solid rgb(57, 135, 144);
             /*background:linear-gradient( 0deg, rgba(47, 118, 125, 1), rgba(47, 118, 125, 0) );*/
         }
-        
+
         h2 {
             color: white;
             margin-bottom: 20px;
             text-shadow: rgba(0, 0, 0, 1) 3px 3px 6px;
+            text-align: center;
         }
-        
+
+        #instructions {
+            margin-bottom: 7px;
+            width: 100%;
+        }
+
         .innerwrap {
             box-sizing: border-box;
             border: 10px solid rgba(47, 118, 125, 1);
             background-color: rgba(57, 135, 144, 0.9);
+            margin-bottom: 30px;
         }
-        
+
         .button {
             margin-bottom: 30px;
             background-color: rgb(35, 82, 85);
@@ -91,14 +101,15 @@
             position: relative;
             min-height: 100px;
         }
+
         /* makes the error message readable and look important */
-        
+
         #errorMessage {
             font-size: 3.2em;
             color: #FCE40C;
             text-align: center;
         }
-        
+
         .button p {
             font-family: 'arial';
             font-size: 20px;
@@ -106,7 +117,7 @@
             color: white;
             text-shadow: rgb(0, 0, 0) 1px 1px 5px;
         }
-        
+
         .button a {
             display: inline-block;
             height: 100%;
@@ -114,16 +125,17 @@
             text-decoration: none;
             padding: 15px;
         }
-        
+
         .button a:hover p {
             text-shadow: rgb(0, 0, 0) 5px 5px 5px;
         }
-        
+
         .space-4 {
             margin-bottom: 30px;
         }
+
         /*        add error css to be big, colored and centered */
-        
+
         .background {
             height: 100%;
             width: 100%;
@@ -136,7 +148,7 @@
             /*-webkit-animation: thefinalfrontier 30s linear infinite;   NO SCROLLING ANIMATION*/
             /*animation: thefinalfrontier 30s linear infinite;*/
         }
-        
+
         @-webkit-keyframes thefinalfrontier {
             from {
                 background-position: 0 0;
@@ -145,7 +157,7 @@
                 background-position: -1680px 0;
             }
         }
-        
+
         @keyframes thefinalfrontier {
             from {
                 background-position: 0 0;
@@ -166,7 +178,6 @@
     <!--    <script src="getCSV.js"></script>-->
 
     <script>
-        
         var queryData = new URI(window.location.href).search(true);
         console.log(queryData);
 
@@ -276,7 +287,7 @@
 
         }
         getCSV(queryData, callbackForGetCSV);
-        
+
     </script>
 </body>
 
