@@ -689,7 +689,7 @@ function drawBox() {
     });
 }
 
-drawBox();
+// drawBox();
 // drawSpotLightOutlines();
 
 //var fixV = imageData[1].spotlights[0].map(function (spotPoint) {

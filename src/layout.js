@@ -10,13 +10,80 @@ var size = {
 };
 size.vbHeight = Math.round(size.vbWidth * size.height / size.width);
 
+function fixSVGSize() {
+    document.querySelector('#wrapper').style.width = '100%'
+    var svg = document.querySelector('svg'),
+        wSize = {
+            h: window.innerHeight,
+            w: window.innerWidth
+        },
+        messageBoxBox = document.querySelector('#descriptionBox').getBoundingClientRect(),
+        svgSizeFromH = {},
+        svgSizeFromW = {},
+        wrapperStyle = window.getComputedStyle(document.getElementById('wrapper')),
+        wrapperBorderTB = parseInt(wrapperStyle.borderTopWidth, 10) + parseInt(wrapperStyle.borderBottomWidth, 10),
+        wrapperBorderRL = parseInt(wrapperStyle.borderRightWidth, 10) + parseInt(wrapperStyle.borderLeftWidth, 10),
+        wrapperPaddingTB = parseInt(wrapperStyle.marginTop, 10) + parseInt(wrapperStyle.marginBottom, 10),
+        msgBoxSize = {
+            h: messageBoxBox.height,
+            w: messageBoxBox.width
+        },
+        extraVert = msgBoxSize.h + wrapperPaddingTB + wrapperBorderTB,
+        extraHoriz = wrapperBorderRL,
+        svgSize, svgH, svgW;
+
+    /************* FROM HEIGHT*****************/
+    svgH = wSize.h - extraVert;
+    svgW = Math.floor(svgH * size.width / size.height);
+
+    if (svgW > msgBoxSize.w) {
+        svgW = msgBoxSize.w;
+        svgH = Math.floor(svgW * size.height / size.width);
+    }
+    svgSizeFromH.h = svgH;
+    svgSizeFromH.w = svgW;
+
+    /************* FROM WIDTH*****************/
+    svgW = msgBoxSize.w;
+    svgH = Math.floor(svgW * size.height / size.width);
+
+    svgSizeFromW.h = svgH;
+    svgSizeFromW.w = svgW;
+
+    //sort by size;
+    sizes = [svgSizeFromH, svgSizeFromW]
+        //put the biggest on top    
+        .sort((a, b) => b.h - a.h)
+        //remove the ones that don't fit
+        .filter((size) => {
+            var widthGood = size.w <= wSize.w - extraHoriz,
+                heightGood = size.h <= wSize.h - extraVert;
+            return widthGood && heightGood;
+        });
+
+//if the window height is smaller than 550px then we need to set it to that
+
+console.log("sizes:", sizes);
+
+    //the first in the list is the biggest that fits 
+    svgSize = sizes[0]
+
+
+
+
+    //this only looks at the hight we have available not the width
+    svg.setAttribute('height', svgSize.h + 'px')
+    svg.setAttribute('width', svgSize.w + 'px')
+    document.querySelector('#wrapper').style.width = svgSize.w + 'px'
+}
+
 var draw = SVG('drawing')
-    // .size(size.width + "px", size.hight + "px")
+    .size("100%", "100%")
     .viewbox(size.vbX, size.vbY, size.vbWidth, size.vbHeight);
 
-    //set the overflow attribute on the svg element
-    draw.node.setAttribute("overflow", "hidden");
-    draw.node.setAttribute("preserveAspectRatio", "xMidYMid slice");
+//set the overflow attribute on the svg element
+// draw.node.setAttribute("overflow", "hidden");
+draw.node.setAttribute("preserveAspectRatio", "xMaxYMax slice");
 
 
 //drop shadow filter used on text and other things

@@ -2,6 +2,8 @@ body {
     background-color: #0b1312;
     margin: 0px auto;
     box-sizing: border-box;
+    color: white;
+    font-family: 'Roboto Slab', serif;
 }
 
 
@@ -9,22 +11,13 @@ body {
 
 #SvgjsText1238 {
     text-decoration: underline;
-    font-family: 'Roboto Slab', serif;
 }
-
-/* for the future box that will hold all the homepage content */
-/*
-#pageContent>div {
-    width: 1730px;
-    margin: auto;
-}
-*/
 
 #descriptionBox {
-    color: #FFF;
-    font-family: 'Roboto Slab', serif;
     display: flex;
-    height: 300px;
+    height: 150px;
+    min-height: 150px;
+    border-top: 5px solid #2F767D;
 }
 
 #descriptionBox div {
@@ -102,6 +95,7 @@ h3 {
 }
 
 svg {
+    display: block;
     margin: 0 auto;
 
     /* the following is code from "https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting-using-css" to stop highlighting */
@@ -124,28 +118,20 @@ span span {
 }
 
 #wrapper {
-    width: 100%;
+    width: calc(100% - 10px);
     max-width: 1170px;
-    margin: 50px auto 0;
-    /* height: 100vh; */
-    display: flex;
+    margin: 15px auto;
+    /* display: flex;
     flex-direction: column;
     align-items: stretch;
-    justify-content: center;
+    justify-content: center; */
     border: 5px solid #2F767D;
-    /* padding: 3px; */
-    
 }
 
 #drawing {
     /* flex-grow: 1; */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* justify-content: flex-start; */
     /* min-height: 675px; */
-}
-
-#descriptionBox {
-    height: 150px;
-    min-height: 150px;
 }
