@@ -2,7 +2,7 @@
 /*eslint no-console:0, no-unused-vars:0*/
 /*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime, paramACircle, SVG*/
 
-const ANIMATION_DURATION = 100;
+const ANIMATION_DURATION = 1000;
 
 
 // START
@@ -688,6 +688,9 @@ function drawBox() {
         width: 4
     });
 }
+
+//change the size of the svg
+fixSVGSize();
 
 // drawBox();
 // drawSpotLightOutlines();
