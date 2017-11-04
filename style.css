@@ -91,7 +91,9 @@ h3 {
 #details {
     font-size: 14pt;
     margin-left: 2vw;
-    color: #888
+    color: #888;
+    display: inline-block;
+
 }
 
 svg {
