@@ -4,6 +4,31 @@
 
 const ANIMATION_DURATION = 1000;
 
+function longestWords(csvData) {
+    var keys = Object.keys(csvData[2]);
+    longest = {
+        i: 1,
+        key: "temperature"
+    };
+console.log(keys)
+    csvData.forEach(function (row, rowI) {
+        keys.forEach(function (key) {
+            if (row[key].text && row[key].text.length > csvData[longest.i][longest.key].text.length) {
+                longest = {
+                    i: rowI,
+                    key: key
+                };
+            }
+        });
+    })
+
+    place = csvData[longest.i][longest.key].text
+    console.log("csvData:", csvData);
+    console.log("longest.i:", longest.i);
+    console.log("longest.key:", longest.key);
+    console.log("place.length:", place.length);
+    console.log("place:", place);
+}
 
 // START
 getCSV((err, csvData) => {
@@ -12,6 +37,7 @@ getCSV((err, csvData) => {
         //		window.location.search = "?file=test"
 
     } else {
+        longestWords(csvData);
         var main = new Main(csvData)
         // while main is in scope, I need to give it access to the outside world
         $('[data-phase]').click(function () {
@@ -682,6 +708,7 @@ function drawSpotLightOutlines() {
         })
     })
 }
+
 function drawBox() {
     draw.rect(size.vbWidth, size.vbHeight).move(size.vbX, size.vbY).fill('none').stroke({
         color: '#f06',
@@ -691,6 +718,22 @@ function drawBox() {
 
 //change the size of the svg
 fixSVGSize();
+
+//set up the resize listener
+window.addEventListener("resize", resizeThrottler, false);
+var resizeTimeout;
+
+function resizeThrottler() {
+    // ignore resize events as long as an actualResizeHandler execution is in the queue
+    if (!resizeTimeout) {
+        resizeTimeout = setTimeout(function () {
+            resizeTimeout = null;
+            fixSVGSize();
+        }, 66);
+    }
+}
+
+
 
 // drawBox();
 // drawSpotLightOutlines();
