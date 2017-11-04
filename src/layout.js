@@ -61,16 +61,21 @@ function fixSVGSize() {
             return widthGood && heightGood;
         });
 
-    //if the window height is smaller than 550px then we need to set it to that
-    if (window.innerHeight < 550) {
-        wSize.h = 550;
-    }
 
     console.log("sizes:", sizes);
 
     //the first in the list is the biggest that fits 
-    svgSize = sizes[0]
 
+    //if the window height is smaller than 550px then we need to set it to that
+    if (sizes.length === 0) {
+        svgSize = {};
+        svgSize.h = 550;
+        svgSize.w = Math.floor(svgSize.h * size.width / size.height);
+
+    } else {
+        svgSize = sizes[0]
+
+    }
 
 
 
