@@ -10,7 +10,7 @@ function longestWords(csvData) {
         i: 1,
         key: "temperature"
     };
-console.log(keys)
+    console.log(keys)
     csvData.forEach(function (row, rowI) {
         keys.forEach(function (key) {
             if (row[key].text && row[key].text.length > csvData[longest.i][longest.key].text.length) {
@@ -697,23 +697,53 @@ class TextController {
 
 
 //a function that draws the outlines for each spotlight
-function drawSpotLightOutlines() {
-    imageData.forEach(function (image) {
-        image.spotlights.forEach(function (spotlight, i) {
+//function drawSpotLightOutlines() {
+//    imageData.forEach(function (image) {
+//        image.spotlights.forEach(function (spotlight, i) {
+//
+//            draw.polygon(spotlight).fill('none').stroke({
+//                color: '#f06',
+//                width: 4
+//            });
+//            spotlight.forEach(function (point, i) {
+//                draw.text(i.toString()).center(point[0], point[1]);
+//            })
+//        })
+//    })
+//}
 
-            draw.polygon(spotlight).fill('none').stroke({
-                color: '#f06',
-                width: 4
-            });
+function drawSpotLightOutline() {
+
+    imageData[0].spotlights.forEach(function (spotlight, i) {
+
+        draw.polygon(spotlight).fill('none').stroke({
+            color: '#f06',
+            width: 4
+        });
+
+        spotlight.forEach(function (point, i) {
+            draw.text(i.toString()).center(point[0], point[1]);
         })
+
     })
+
 }
+
 
 function drawBox() {
     draw.rect(size.vbWidth, size.vbHeight).move(size.vbX, size.vbY).fill('none').stroke({
         color: '#f06',
         width: 4
     });
+}
+
+function drawPoint() {
+    var point = list[1][1]
+    draw.circle(10).center(point[0], point[1]).fill('orange')
+        .stroke({
+            color: '#f06',
+            width: 4
+        });
 }
 
 //change the size of the svg
@@ -735,8 +765,9 @@ function resizeThrottler() {
 
 
 
-// drawBox();
-// drawSpotLightOutlines();
+//drawBox();
+//drawSpotLightOutline();
+
 
 //var fixV = imageData[1].spotlights[0].map(function (spotPoint) {
 //    return [Math.round(spotPoint[0]), Math.round(spotPoint[1])]
