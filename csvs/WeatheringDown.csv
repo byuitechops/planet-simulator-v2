@@ -1,5 +1,5 @@
 Row Heading,Temperature,CO2,Volcano,Mountains,Ice,Sea,Insolation,Weathering C Burial,CO3 Desposition,Sediment,Weathering C Release,Other
-forcer,,,,,,,,1,,,,
+forcer,,,,,,,,,,,,Weathering Down
 initial,2,2,3,3,4,2,3,5,5,3,3,
 100-200 years,2,2,3,3,4,2,3,4,5,3,3,
 timing,4,3,7,0,5,6,0,1,2,0,0,
