@@ -98,7 +98,7 @@ h3 {
 
 svg {
     display: block;
-    margin: 0 auto;
+    margin: 0;
 
     /* the following is code from "https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting-using-css" to stop highlighting */
     -webkit-touch-callout: none;
@@ -120,17 +120,19 @@ span span {
 }
 
 #wrapper {
-    width: calc(100% - 10px);
-    max-width: 1170px;
+    /* width: calc(100% - 10px); */
+    /* max-width: 1170px; */
     margin: 15px auto;
+    text-align: center;
     /* display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: center; */
-    border: 5px solid #2F767D;
 }
 
 #drawing {
+    display: inline-block;
+    border: 5px solid #2F767D;
     /* flex-grow: 1; */
     /* display: flex; */
     /* flex-direction: column; */

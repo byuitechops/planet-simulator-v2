@@ -1,6 +1,6 @@
 /*eslint-env es6, browser*/
 /*eslint no-console:0, no-unused-vars:0*/
-/*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime, paramACircle, SVG*/
+/*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime, paramACircle, SVG, fixSVGSize*/
 
 const ANIMATION_DURATION = 1000;
 
@@ -10,7 +10,7 @@ function longestWords(csvData) {
         i: 1,
         key: "temperature"
     };
-    console.log(keys)
+    console.log(keys);
     csvData.forEach(function (row, rowI) {
         keys.forEach(function (key) {
             if (row[key].text && row[key].text.length > csvData[longest.i][longest.key].text.length) {
@@ -643,21 +643,30 @@ class TextController {
         return new Promise((resolve, reject) => {
             // display the text
             console.log(AOarray[0].TPdata[this.currentTP])
-            $("#message").text(AOarray[0].TPdata[this.currentTP].text)
-            document.getElementById("details").innerHTML = `${AOarray[0].imageData.label} <span>${AOarray[0].TPdata[AOarray[0].currentState].value+1} to ${AOarray[0].TPdata[this.currentTP].value+1}</span>`
+            // $("#message").text(AOarray[0].TPdata[this.currentTP].text)
+            // document.getElementById("details").innerHTML = `${AOarray[0].imageData.label} <span>${AOarray[0].TPdata[AOarray[0].currentState].value+1} to ${AOarray[0].TPdata[this.currentTP].value+1}</span>`
+
+            SVG.get("message2").text(wrapText(AOarray[0].TPdata[this.currentTP].text));
+            SVG.get("details2").text(`${AOarray[0].imageData.label}: ${AOarray[0].TPdata[AOarray[0].currentState].value+1} to ${AOarray[0].TPdata[this.currentTP].value+1}`);
+
             resolve(AOarray)
         })
     }
 
     displayInstructions() {
-        $("#message").text("Click on a time period above")
+        //$("#message").text("Click on a time period above");
+        SVG.get("message2").text("Click on a time period above");
+
     }
     /* removes the text from the text box */
     removeText(animatedObjectArray) {
         return new Promise((resolve, reject) => {
             // we don't need the animatedObjectArray but just need to carry on the promise chain
-            $("#message").text("")
-            $("#details").text("")
+            //$("#message").text("")
+            //$("#details").text("")
+
+            SVG.get("message2").text("")
+            SVG.get("details2").text("")
 
             // also make sure that 'isActive' is set to false
             this.isActive = "false"
@@ -691,59 +700,30 @@ class TextController {
     setTimePeriod(currentTP) {
         this.currentTP = currentTP
         var phaseTitle = this.Times[this.currentTP]
-        $("#currentTP").text(phaseTitle)
+        //$("#currentTP").text(phaseTitle)
+        SVG.get("currentTP2").text(phaseTitle)
     }
 }
 
 
 //a function that draws the outlines for each spotlight
-//function drawSpotLightOutlines() {
-//    imageData.forEach(function (image) {
-//        image.spotlights.forEach(function (spotlight, i) {
-//
-//            draw.polygon(spotlight).fill('none').stroke({
-//                color: '#f06',
-//                width: 4
-//            });
-//            spotlight.forEach(function (point, i) {
-//                draw.text(i.toString()).center(point[0], point[1]);
-//            })
-//        })
-//    })
-//}
+function drawSpotLightOutlines() {
+    imageData.forEach(function (image) {
+        image.spotlights.forEach(function (spotlight, i) {
 
-function drawSpotLightOutline() {
-
-    imageData[0].spotlights.forEach(function (spotlight, i) {
-
-        draw.polygon(spotlight).fill('none').stroke({
-            color: '#f06',
-            width: 4
-        });
-
-        spotlight.forEach(function (point, i) {
-            draw.text(i.toString()).center(point[0], point[1]);
+            draw.polygon(spotlight).fill('none').stroke({
+                color: '#f06',
+                width: 4
+            });
         })
-
     })
-
 }
-
 
 function drawBox() {
     draw.rect(size.vbWidth, size.vbHeight).move(size.vbX, size.vbY).fill('none').stroke({
         color: '#f06',
         width: 4
     });
-}
-
-function drawPoint() {
-    var point = list[1][1]
-    draw.circle(10).center(point[0], point[1]).fill('orange')
-        .stroke({
-            color: '#f06',
-            width: 4
-        });
 }
 
 //change the size of the svg
@@ -763,11 +743,94 @@ function resizeThrottler() {
     }
 }
 
+function testText() {
+
+    draw.text("The BEST!")
+        .attr('id', "message2")
+        .font(layoutData.styling["normal"])
+        .font({
+            size: 45,
+            anchor: 'middle'
+        })
+        .center(size.width / 2, size.height / 2);
+}
+
+function wrapText(textIn) {
+    var maxLineLength = 150; //magic number I played with to find (based on font size)
+    return textIn
+        //split on spaces into an array of strings
+        .split(/\s+/g)
+        //put them back into line strings based on the length of the line
+        .reduce(function (paragraph, word) {
+            var lastLine = paragraph.length - 1;
+            //check if we have room, +1 is for the new space
+            //=== 0 is incase one word is longer than the max length it will not skip the first line
+            if (paragraph[lastLine].length === 0) {
+                paragraph[lastLine] += word;
+            } else if (paragraph[lastLine].length + word.length + 1 <= maxLineLength) {
+                //we have room, add that word to current line
+                paragraph[lastLine] += ' ' + word;
+            } else {
+                //no room, make new line
+                paragraph.push(word);
+            }
+            return paragraph;
+        }, [''])
+        // we have an array of string lines, join to one string with '\n' for svg.js text
+        .join('\n');
+}
+
+function drawTextBox() {
 
 
-//drawBox();
-//drawSpotLightOutline();
 
+    var textBoxH = 200,
+        padding = 10;
+
+    //make the group for the text box
+    var textBox = draw.group()
+        .attr('id', "textBox2")
+        .move(size.vbX, size.vbHeight + size.vbY - textBoxH);
+
+    //background for the 
+    textBox.rect(size.vbWidth, textBoxH)
+        .fill('rgb(11,19,18)');
+
+    //Title
+    textBox.text("Initial")
+        .attr('id', "currentTP2")
+        .move(padding, padding)
+        .font(layoutData.styling["normal"])
+        .font(layoutData.styling["operator"]);
+
+    //values
+    textBox.text("Mountains: 1 to 2")
+        .attr('id', "details2")
+        .move(300, padding)
+        .font(layoutData.styling["normal"])
+        .font(layoutData.styling["operator"]);
+
+    var lipsum = new LoremIpsum();
+    var test2 = lipsum.generate(100);
+
+    //message text 
+    textBox.text(wrapText(test2))
+        .attr('id', "message2")
+        .move(padding, padding + 35)
+        .font(layoutData.styling["normal"])
+        .font({
+            size: 20,
+            weight: 'normal'
+        });
+
+}
+drawTextBox();
+//testText();
+
+// #message2
+
+// drawBox();
+// drawSpotLightOutlines();
 
 //var fixV = imageData[1].spotlights[0].map(function (spotPoint) {
 //    return [Math.round(spotPoint[0]), Math.round(spotPoint[1])]

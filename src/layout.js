@@ -1,16 +1,18 @@
 /*eslint-env es6, browser*/
 /*eslint no-console:0, semi: ["error", "always"] */
 /*global SVG, $, imageData, layoutData*/
-var size = {
-    width: 1730,
-    height: 938,
-    vbWidth: 1600,
-    vbX: 50,
-    vbY: 60
-};
+var textBoxH = 200,
+    size = {
+        width: 1730,
+        height: 938 + textBoxH,
+        vbWidth: 1600,
+        vbX: 50,
+        vbY: 60,
+        textBoxH: textBoxH
+    };
 size.vbHeight = Math.round(size.vbWidth * size.height / size.width);
 
-function fixSVGSize() {
+function fixSVGSizeOld() {
     document.querySelector('#wrapper').style.width = '100%'
     var svg = document.querySelector('svg'),
         wSize = {
@@ -85,13 +87,51 @@ function fixSVGSize() {
     document.querySelector('#wrapper').style.width = svgSize.w + 'px'
 }
 
+function fixSVGSize() {
+    var svg = document.querySelector('svg'),
+        wSize = {
+            h: window.innerHeight,
+            w: window.innerWidth
+        },
+        padding = 20,
+        fromHeight = {},
+        fromWidth = {},
+        sizes;
+
+
+    //from window height
+    fromHeight.h = wSize.h - (2 * padding);
+    fromHeight.w = Math.round(fromHeight.h * size.width / size.height);
+
+    //from window width
+    fromWidth.w = wSize.w - (2 * padding);
+    fromWidth.h = Math.round(fromWidth.w * size.height / size.width);
+
+    //sort by size
+    sizes = [fromHeight, fromWidth]
+        //put the biggest on top    
+        .sort((a, b) => b.h - a.h)
+        //remove the ones that don't fit
+        .filter((size) => {
+            var widthGood = size.w <= wSize.w - (2*padding),
+                heightGood = size.h <= wSize.h - (2*padding);
+            return widthGood && heightGood;
+        });
+
+
+    console.log(sizes);
+    svg.setAttribute('height', sizes[0].h + 'px')
+    svg.setAttribute('width', sizes[0].w + 'px')
+    //document.querySelector('#wrapper').style.width = sizes[0].w + 'px'
+}
+
 var draw = SVG('drawing')
-    .size("100%", "100%")
-    .viewbox(size.vbX, size.vbY, size.vbWidth, size.vbHeight);
+    .size(size.width, size.height + size.textBoxH)
+    .viewbox(size.vbX, size.vbY, size.vbWidth, size.vbHeight + size.textBoxH);
 
 //set the overflow attribute on the svg element
 // draw.node.setAttribute("overflow", "hidden");
-draw.node.setAttribute("preserveAspectRatio", "xMaxYMax slice");
+draw.node.setAttribute("preserveAspectRatio", "xMinYMin slice");
 
 
 //drop shadow filter used on text and other things
