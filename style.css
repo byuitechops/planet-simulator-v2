@@ -9,8 +9,12 @@ body {
 
 /* this is the "back to home" button */
 
-#SvgjsText1238 {
+#SvgjsText1237 {
     text-decoration: underline;
+}
+
+#SvgjsText1237:hover {
+    text-shadow: 1.1px 1.1px black;
 }
 
 #descriptionBox {
