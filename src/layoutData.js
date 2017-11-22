@@ -137,22 +137,22 @@ var layoutData = {
             y: 510,
             font: []
         },
-        {
-            text: "CARBON BURIAL",
-            x: 1027,
-            y: 525,
-            font: ["smallText"]
-        },
+//        {
+    //            text: "CARBON BURIAL",
+    //            x: 1027,
+    //            y: 525,
+    //            font: ["smallText"]
+    //        },
         {
             text: "WEATHERING",
             x: 1452,
-            y: 484,
+            y: 480,
             font: []
         },
         {
-            text: "CARBON RELEASE",
+            text: "BURIED CARBON\nRELEASE",
             x: 1452,
-            y: 500,
+            y: 496,
             font: ["smallText"]
         },
         {
