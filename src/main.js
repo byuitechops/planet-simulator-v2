@@ -1,15 +1,16 @@
 /*eslint-env es6, browser*/
 /*eslint no-console:0, no-unused-vars:0*/
-/*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime, paramACircle, SVG, fixSVGSize*/
+/*global $, getCSV, layoutData, imageData, forcers, shadow, draw, timeline, highlightTime, paramACircle, SVG, fixSVGSize, size*/
 
-const ANIMATION_DURATION = 1000;
+const ANIMATION_DURATION = 200;
 
 function longestWords(csvData) {
-    var keys = Object.keys(csvData[2]);
-    longest = {
-        i: 1,
-        key: "temperature"
-    };
+    var keys = Object.keys(csvData[2]),
+        longest = {
+            i: 1,
+            key: "temperature"
+        },
+        place;
     console.log(keys);
     csvData.forEach(function (row, rowI) {
         keys.forEach(function (key) {
@@ -20,9 +21,9 @@ function longestWords(csvData) {
                 };
             }
         });
-    })
+    });
 
-    place = csvData[longest.i][longest.key].text
+    place = csvData[longest.i][longest.key].text;
     console.log("csvData:", csvData);
     console.log("longest.i:", longest.i);
     console.log("longest.key:", longest.key);
@@ -33,18 +34,18 @@ function longestWords(csvData) {
 // START
 getCSV((err, csvData) => {
     if (err) {
-        console.log("couldn't get csv data")
+        console.log("couldn't get csv data");
         //		window.location.search = "?file=test"
 
     } else {
         longestWords(csvData);
-        var main = new Main(csvData)
+        var main = new Main(csvData);
         // while main is in scope, I need to give it access to the outside world
         $('[data-phase]').click(function () {
-            main.onClick($(this).attr('data-phase'))
-        })
+            main.onClick($(this).attr('data-phase'));
+        });
     }
-})
+});
 
 /* King of the world */
 class Main {
@@ -56,40 +57,40 @@ class Main {
      */
 
     constructor(csvData) {
-        this.csvData = csvData
+        this.csvData = csvData;
         // set the forcer
-        this.setForcer(csvData[0])
+        this.setForcer(csvData[0]);
         // Create an instance of the Animate Class
-        this.animator = new Animator(csvData)
+        this.animator = new Animator(csvData);
         this.isAnimating = false;
-        this.bindInput()
+        this.bindInput();
     }
 
     setForcer() {
-        var arr = this.csvData[0]
-        var bools = [arr.mountain, arr.volcano, arr.weatheringCBurial || arr.sediment, arr.weatheringCRelease, arr.insolation].map(Boolean)
-        var thereWasAtLeastOne = false
+        var arr = this.csvData[0];
+        var bools = [arr.mountain, arr.volcano, arr.weatheringCBurial || arr.sediment, arr.weatheringCRelease, arr.insolation].map(Boolean);
+        var thereWasAtLeastOne = false;
         bools.forEach((isActive, i) => {
             if (isActive) {
-                thereWasAtLeastOne = true
-                var group = forcers.children()[i]
-                group.children()[0].opacity(0)
-                group.children()[1].opacity(1)
+                thereWasAtLeastOne = true;
+                var group = forcers.children()[i];
+                group.children()[0].opacity(0);
+                group.children()[1].opacity(1);
                 group.children()[2].font(layoutData.styling["normal"]).font({
                     weight: 400
-                }).filter(shadow)
+                }).filter(shadow);
             }
-        })
+        });
         if (!thereWasAtLeastOne) {
-            forcers.opacity(0)
+            forcers.opacity(0);
             draw.text(function (add) {
-                    var text = arr.other.split("_2")
-                    add.tspan(text[0])
+                    var text = arr.other.split("_2");
+                    add.tspan(text[0]);
                     if (text.length == 2) {
                         add.tspan('2').dy(8).font({
                             size: 30
-                        })
-                        add.tspan(text[1]).dy(-8)
+                        });
+                        add.tspan(text[1]).dy(-8);
                     }
                 })
                 .font(layoutData.styling["normal"])
@@ -98,7 +99,7 @@ class Main {
                     anchor: 'middle'
                 })
                 .move(480, 120)
-                .filter(shadow)
+                .filter(shadow);
         }
     }
 
@@ -106,18 +107,18 @@ class Main {
     onClick(newPhase) {
         // Check if we are already doing something
         if (this.isAnimating) {
-            return
+            return;
         }
         // well we are doing something now
-        this.isAnimating = true
+        this.isAnimating = true;
 
         // pass the information to the Animator Object
-        this.animator.run(newPhase, this.done.bind(this))
+        this.animator.run(newPhase, this.done.bind(this));
     }
 
     // clean up when the animator is finished
     done() {
-        this.isAnimating = false
+        this.isAnimating = false;
         //		console.log("Touch Down!")
     }
 
@@ -125,7 +126,7 @@ class Main {
     bindInput() {
         $(window).keydown(function (e) {
             if (e.which >= 49 && e.which <= 53)
-                this.onClick(e.which - 49)
+                this.onClick(e.which - 49);
             return;
         }.bind(this));
     }
@@ -146,92 +147,92 @@ class Animator {
 
     constructor(csvData) {
         // save the csv Data
-        this.csvData = csvData
+        this.csvData = csvData;
         this.currentTP = 0;
         // create an instance of the spotlightStage
-        this.stage = new SpotlightStage()
+        this.stage = new SpotlightStage();
         // create an instance of the Text Controller
-        this.txtControl = new TextController()
-        this.txtControl.setTimePeriod(this.currentTP)
-        this.txtControl.displayInstructions()
-        this.animatedObjects = []
+        this.txtControl = new TextController();
+        this.txtControl.setTimePeriod(this.currentTP);
+        this.txtControl.displayInstructions();
+        this.animatedObjects = [];
 
         // create all the animated Objects
         imageData.forEach(image => {
             // get all of the csv data relevant to this AO
-            var relevantData = csvData.map(TP => TP[image.name])
+            var relevantData = csvData.map(TP => TP[image.name]);
             // create the AO
-            var tempAO = new AnimatedObject(image, relevantData)
+            var tempAO = new AnimatedObject(image, relevantData);
             // and add it too our collection
-            this.animatedObjects.push(tempAO)
-        })
+            this.animatedObjects.push(tempAO);
+        });
         // create all the Time Period Transitions
-        var numTP = timeline.children().length
-        this.TPTransitions = []
+        var numTP = timeline.children().length;
+        this.TPTransitions = [];
         for (var TP = 0; TP < numTP; TP++) {
             this.TPTransitions.push(
-                new TimePeriodTransition(TP, this.animatedObjects, this.txtControl, this.stage))
+                new TimePeriodTransition(TP, this.animatedObjects, this.txtControl, this.stage));
         }
     }
 
     /* The main run function that is called after the user clicks on a time period */
     run(newTP, callback) {
-        this.callback = callback
+        this.callback = callback;
         //make it a number
         newTP = +newTP;
 
         // if going backwards just set state
         if (newTP === this.currentTP + 1) {
 
-            var start = +this.currentTP + 1
+            var start = +this.currentTP + 1;
 
             // turn on spotlight
-            this.stage.dimLights()
+            this.stage.dimLights();
 
             // Run all of the objects by chaining their promises together
-            var runLikeTheWind = this.TPTransitions[start].run()
+            var runLikeTheWind = this.TPTransitions[start].run();
             for (var i = start + 1; i <= newTP; i++)
-                runLikeTheWind = runLikeTheWind.then(this.TPTransitions[i].run.bind(this.TPTransitions[i]))
+                runLikeTheWind = runLikeTheWind.then(this.TPTransitions[i].run.bind(this.TPTransitions[i]));
 
             // Then to finish things off
             runLikeTheWind
                 .then(this.done.bind(this))
                 .catch(function () {
-                    console.log("Someone wasn't happy")
-                    this.setState(this.currentTP)
-                    this.done()
-                }.bind(this))
+                    console.log("Someone wasn't happy");
+                    this.setState(this.currentTP);
+                    this.done();
+                }.bind(this));
 
             // And Finnally (Even though this will happen before the animations)
-            this.currentTP = newTP
+            this.currentTP = newTP;
         } else {
-            this.setState(newTP)
-            this.txtControl.setTimePeriod(newTP)
-            this.txtControl.displayInstructions()
-            this.callback()
+            this.setState(newTP);
+            this.txtControl.setTimePeriod(newTP);
+            this.txtControl.displayInstructions();
+            this.callback();
         }
 
     }
 
     setState(newTP) {
-        this.currentTP = newTP
+        this.currentTP = newTP;
         // run through the list of animated objects
-        this.animatedObjects.forEach(AO => AO.setState(newTP))
-        highlightTime(timeline.children()[this.currentTP])
+        this.animatedObjects.forEach(AO => AO.setState(newTP));
+        highlightTime(timeline.children()[this.currentTP]);
     }
 
     done() {
 
         // turn off spotlight
-        this.stage.undimLights()
+        this.stage.undimLights();
 
         // disable the txtBox
-        this.txtControl.removeText()
-        this.txtControl.setTimePeriod(this.currentTP)
-        this.txtControl.displayInstructions()
-        this.txtControl.disable()
+        this.txtControl.removeText();
+        this.txtControl.setTimePeriod(this.currentTP);
+        this.txtControl.displayInstructions();
+        this.txtControl.disable();
 
-        this.callback()
+        this.callback();
     }
 }
 
@@ -252,70 +253,70 @@ class TimePeriodTransition {
 
     constructor(periodNumber, animatedObjects, textController, stage) {
         // save the passed data
-        this.targetTP = periodNumber
-        this.animatedObjects = animatedObjects
-        this.txtControl = textController
-        this.stage = stage
+        this.targetTP = periodNumber;
+        this.animatedObjects = animatedObjects;
+        this.txtControl = textController;
+        this.stage = stage;
         // create the list of animations that need to happen
-        this.makeFilteredList()
+        this.makeFilteredList();
         // map those objects into functions that return promises
-        this.chunks = this.filteredList.map(this.createAnimationChunk.bind(this))
+        this.chunks = this.filteredList.map(this.createAnimationChunk.bind(this));
     }
 
     run() {
         return new Promise((resolve, reject) => {
             // I know this is an odd way of doing it, but hey it works
-            this.resolve = resolve
-            this.reject = reject
+            this.resolve = resolve;
+            this.reject = reject;
 
             // Pass control of the buttons to this TPT
-            this.bindInputs()
+            this.bindInputs();
 
             // set the textBoxController's title to the periodName
-            this.txtControl.setTimePeriod(this.targetTP)
-            this.currentIndex = 0
-            this.isWaiting = false
+            this.txtControl.setTimePeriod(this.targetTP);
+            this.currentIndex = 0;
+            this.isWaiting = false;
 
             // call the first function in the array to start the animations
-            this.chunks[this.currentIndex]()
+            this.chunks[this.currentIndex]();
 
-            highlightTime(timeline.children()[this.targetTP])
-        })
+            highlightTime(timeline.children()[this.targetTP]);
+        });
     }
 
     /* manage all of my event lisenters */
     bindInputs() {
         // remove previous control
-        $("#next").off("click")
-        $("#prev").off("click")
-        $("#terminate").off("click")
-        $(document).off('keydown')
+        $("#next").off("click");
+        $("#prev").off("click");
+        $("#terminate").off("click");
+        $(document).off('keydown');
 
         // give us all the power
-        $("#next").click(this.goToNext.bind(this))
-        $("#prev").click(this.goToBack.bind(this))
-        $("#terminate").click(this.terminate.bind(this))
+        $("#next").click(this.goToNext.bind(this));
+        $("#prev").click(this.goToBack.bind(this));
+        $("#terminate").click(this.terminate.bind(this));
 
         // cause arrow keys are cool
         $(document).keydown(function (e) {
             if (e.which == 39)
-                this.goToNext()
+                this.goToNext();
             else if (e.which == 37 && this.currentIndex != 0)
-                this.goToBack()
+                this.goToBack();
             else if (e.which == 13) // enter
-                this.terminate()
+                this.terminate();
             return;
         }.bind(this));
 
     }
 
     terminate() {
-        $("#next").off("click")
-        $("#prev").off("click")
-        $("#terminate").off("click")
-        $(document).off('keydown')
+        $("#next").off("click");
+        $("#prev").off("click");
+        $("#terminate").off("click");
+        $(document).off('keydown');
         this.isWaiting = true;
-        this.reject()
+        this.reject();
     }
 
     /* Creates the 2d array of animations that need to happen from the csv */
@@ -324,20 +325,20 @@ class TimePeriodTransition {
         this.filteredList = this.animatedObjects
             // filter out the zeros and nulls
             .filter((AO) => {
-                return AO.TPdata[this.targetTP].timing
+                return AO.TPdata[this.targetTP].timing;
             })
             // creates the 2d array and sorts them
             .reduce((chunks, AO) => {
-                var timing = AO.TPdata[this.targetTP].timing
+                var timing = AO.TPdata[this.targetTP].timing;
                 if (chunks[timing]) { // if someone is already in our spot
-                    chunks[timing].push(AO) // add to thier array
+                    chunks[timing].push(AO); // add to thier array
                 } else {
-                    chunks[timing] = [AO] // else create a new array
+                    chunks[timing] = [AO]; // else create a new array
                 }
-                return chunks
+                return chunks;
             }, [])
             // gets rid of any holes in our array (like the 0th element)
-            .filter(AOarray => AOarray)
+            .filter(AOarray => AOarray);
     }
 
     /* Creates the promise chain that walks through all of the steps of a single chunk*/
@@ -351,17 +352,17 @@ class TimePeriodTransition {
                 .then(this.stage.move.bind(this.stage)) // move the spotlight
                 .then(this.txtControl.displayText.bind(this.txtControl)) // display the text
                 .then(this.runArray.bind(this)) // run the Array of animations
-                .then(this.cleanUp.bind(this)) // cleanUp
-        }.bind(this)
+                .then(this.cleanUp.bind(this)); // cleanUp
+        }.bind(this);
     }
 
     /* called after the animation runs to prep for the next one */
     cleanUp() {
         if (this.isWaiting == false) {
             // set the 'isWaiting' to false
-            this.isWaiting = true
+            this.isWaiting = true;
             // make the 'next' button clickable, and if the back button should be enabled
-            this.txtControl.enable(this.currentIndex == 0)
+            this.txtControl.enable(this.currentIndex == 0);
         }
     }
 
@@ -371,14 +372,14 @@ class TimePeriodTransition {
         // if 'isWaiting' is true
         if (this.isWaiting) {
             // not waiting anymore
-            this.isWaiting = false
-            this.txtControl.disable()
-            this.currentIndex++
-                // call the next function in our array if there is one
-                if (this.currentIndex < this.chunks.length)
-                    this.chunks[this.currentIndex]()
+            this.isWaiting = false;
+            this.txtControl.disable();
+            this.currentIndex++;
+            // call the next function in our array if there is one
+            if (this.currentIndex < this.chunks.length)
+                this.chunks[this.currentIndex]();
             else
-                this.resolve()
+                this.resolve();
         }
     }
 
@@ -388,16 +389,16 @@ class TimePeriodTransition {
         // if 'isWaiting' is true
         if (this.isWaiting) {
             // not waiting anymore
-            this.isWaiting = false
+            this.isWaiting = false;
             // we are backing up
             // so we want to watch the animations we have already done again,
             // so we have to reset the one that we just finished
-            this.resetAnimations(this.currentIndex--)
-            this.resetAnimations(this.currentIndex)
+            this.resetAnimations(this.currentIndex--);
+            this.resetAnimations(this.currentIndex);
 
-            this.txtControl.disable()
+            this.txtControl.disable();
             // call the next function in our array
-            this.chunks[this.currentIndex]()
+            this.chunks[this.currentIndex]();
         }
     }
 
@@ -406,22 +407,22 @@ class TimePeriodTransition {
         // return a promise which resolves when we are done counting callbacks
         return new Promise((resolve, reject) => {
 
-            var animationsLeft = animatedObjectArray.length
+            var animationsLeft = animatedObjectArray.length;
 
             animatedObjectArray.forEach(AO => {
                 // Counting callbacks even though they should be the same duration
                 AO.animateToState(this.targetTP, () => {
-                    animationsLeft--
+                    animationsLeft--;
                     if (animationsLeft == 0) {
-                        resolve(animatedObjectArray)
+                        resolve(animatedObjectArray);
                     }
-                })
-            })
-        })
+                });
+            });
+        });
     }
 
     resetAnimations(index) {
-        this.filteredList[index].forEach(AO => AO.setState(this.targetTP - 1))
+        this.filteredList[index].forEach(AO => AO.setState(this.targetTP - 1));
     }
 }
 
@@ -437,89 +438,89 @@ class AnimatedObject {
      */
 
     constructor(imageData, csvData) {
-        this.imageData = imageData
-        this.forcer = csvData.shift()
-        this.TPdata = csvData
-        this.itemsPerFrame = this.imageData.items / 5
-        this.setState(0)
+        this.imageData = imageData;
+        this.forcer = csvData.shift();
+        this.TPdata = csvData;
+        this.itemsPerFrame = this.imageData.items / 5;
+        this.setState(0);
     }
 
     animateToState(state, callback) {
 
         // if they are trying to make us animate backwards, just skip to it
         if (state <= this.currentState) {
-            this.setState(state)
-            callback()
+            this.setState(state);
+            callback();
             return;
         }
         // run through all of our frames
         // for some reason js dosen't have this range function
         function norm(n) {
-            return n / Math.abs(n) || 0
+            return n / Math.abs(n) || 0;
         }
 
         function range(s, e) {
-            return Array(Math.abs(e - s)).fill().map((n, i) => s + i * norm(e - s) + norm(e - s))
+            return Array(Math.abs(e - s)).fill().map((n, i) => s + i * norm(e - s) + norm(e - s));
         }
         // the list of frames that need to become visable
-        var queue = []
+        var queue = [];
         // get the list of frames that need to become visable
         range(this.TPdata[this.currentState].value * this.itemsPerFrame, this.TPdata[state].value * this.itemsPerFrame)
             .forEach(i => {
                 queue.push({
                     frame: i,
                     mac: false
-                })
+                });
                 if (this.imageData.macaroni.needed) {
                     queue.push({
                         frame: i,
                         mac: true
-                    })
+                    });
                 }
-            })
+            });
         // double wrap the the animations so that I can turn them into a promise chain
         var promiseWrapper = function (target) {
             return function () {
                 return new Promise(resolve => {
-                    var that = this // i'll need this in a sec
+                    var that = this; // i'll need this in a sec
                     // turning on and off every single one of our images
                     this.imageData.handle.each(function () {
                         if (this.data('macaroni') == target.mac) {
-                            var i = this.data('frame')
+                            var i = this.data('frame');
                             // isFrame only knows about the main animation, but macaroni meters are also being processed here
                             if (that.imageData.isFrame && !target.mac)
-                                this.animate(ANIMATION_DURATION).opacity(+(i <= target.frame))
+                                this.animate(ANIMATION_DURATION).opacity(+(i <= target.frame));
                             else
-                                this.animate(ANIMATION_DURATION).opacity(+(i == target.frame / (this.data('macaroni') ? that.itemsPerFrame : 1))) // macaronis don't have more than one item per frame
+                                this.animate(ANIMATION_DURATION).opacity(+(i == target.frame / (this.data('macaroni') ? that.itemsPerFrame : 1))); // macaronis don't have more than one item per frame
                         }
-                    })
+                    });
                     // yah this is probably the worst possible way to do this
-                    setTimeout(resolve, ANIMATION_DURATION)
-                })
-            }.bind(this)
-        }.bind(this)
+                    setTimeout(resolve, ANIMATION_DURATION);
+                });
+            }.bind(this);
+        }.bind(this);
 
         queue.map(promiseWrapper) // turn the frames that need to be animated into promise functions
             .reduce((prev, cur) => prev.then(cur), Promise.resolve()) // chain all the promise functions
-            .then(callback) // then call mom
-        this.currentState = state
+            .then(callback); // then call mom
+        this.currentState = state;
     }
 
     setState(state) {
         // Immediately set our state to the requested one
-        this.currentState = state
+        this.currentState = state;
         // Which frame are we trying to get to?
-        var targetFrame = this.TPdata[state].value * this.itemsPerFrame
-        var that = this // i'll need this in a sec
+        var targetFrame = this.TPdata[state].value * this.itemsPerFrame;
+        var that = this; // i'll need this in a sec
         // turning on and off every single one of our images
         this.imageData.handle.each(function () {
-            var i = this.data('frame')
+            var i = this.data('frame');
             // isFrame only knows about the main animation, but macaroni meters are also being processed here
             if (that.imageData.isFrame && !this.data('macaroni'))
-                this.opacity(+(i <= targetFrame))
+                this.opacity(+(i <= targetFrame));
             else
-                this.opacity(+(i == targetFrame / (this.data('macaroni') ? that.itemsPerFrame : 1))) // macaronis don't have more than one item per frame
-        })
+                this.opacity(+(i == targetFrame / (this.data('macaroni') ? that.itemsPerFrame : 1))); // macaronis don't have more than one item per frame
+        });
     }
 }
 
@@ -540,22 +541,26 @@ class SpotlightStage {
         this.filter.attr('name', 'blurForSpotlights');
 
         //this mask works just like in photoshop, draws the white portion
-        this.mask = draw.mask().attr('name', 'spotlightsMask').add(draw.rect(size.width, size.height).fill('#fff'))
+        this.mask = draw.mask().attr('name', 'spotlightsMask').add(draw.rect(size.width, size.height).fill('#fff'));
         // Initalize our group
         this.spotlights = draw.group().attr('name', 'spotlights');
-        this.isActive = false
-        this.blackVeil = draw.rect(size.width, size.height).attr('name', 'spotlightsRect').attr('visibility', 'hidden').maskWith(this.mask)
+        this.isActive = false;
+        this.blackVeil = draw.rect(size.vbWidth, size.vbHeight - layoutData.textMessage.height)
+            .move(size.vbX, size.vbY)
+            .attr('name', 'spotlightsRect')
+            .attr('visibility', 'hidden')
+            .maskWith(this.mask);
 
 
 
         //count the total possible spotlights
-        this.numSpotlights = imageData.reduce((sum, image) => sum + image.spotlights.length, 0)
+        this.numSpotlights = imageData.reduce((sum, image) => sum + image.spotlights.length, 0);
 
 
         //make them all
         //each spotlight is black for the mask
         for (var i = 0; i < this.numSpotlights; i++) {
-            this.createLight()
+            this.createLight();
         }
 
         //add the spotlight group to the mask
@@ -565,14 +570,14 @@ class SpotlightStage {
     /* called when they want to start the show */
     dimLights() {
         // do the magic to add the mask filter
-        this.blackVeil.attr('visibility', 'visible').opacity(0).animate(ANIMATION_DURATION).opacity(.6)
+        this.blackVeil.attr('visibility', 'visible').opacity(0).animate(ANIMATION_DURATION).opacity(.6);
         this.isActive = true;
     }
 
     /* called when the show ends */
     undimLights() {
         // do the magic to take off the mask filter
-        this.blackVeil.animate(ANIMATION_DURATION).opacity(0).attr('visibility', 'hidden')
+        this.blackVeil.animate(ANIMATION_DURATION).opacity(0).attr('visibility', 'hidden');
         this.isActive = false;
     }
 
@@ -581,14 +586,14 @@ class SpotlightStage {
         return new Promise((resolve, reject) => {
             // if the lights are not dimmed, then dim them
             if (!this.isActive) {
-                this.dimLights()
+                this.dimLights();
             }
             var spotsNeeded = AOarray.reduce((spots, AO) => {
                 return spots.concat(AO.imageData.spotlights);
             }, []);
 
             // turn off lights that aren't needed
-            this.turnOffLight(this.spotlights.children().filter(node => node.opacity()).length - spotsNeeded.length)
+            this.turnOffLight(this.spotlights.children().filter(node => node.opacity()).length - spotsNeeded.length);
 
             //move all the spots to their correct spot
             spotsNeeded.forEach((spot, i) => {
@@ -596,9 +601,9 @@ class SpotlightStage {
                 this.spotlights.children()[i].animate(ANIMATION_DURATION)
                     .opacity(1)
                     .plot(spot)
-                    .after(() => resolve(AOarray))
-            })
-        })
+                    .after(() => resolve(AOarray));
+            });
+        });
     }
 
     /* add a spotlight to our array */
@@ -617,9 +622,9 @@ class SpotlightStage {
     /* remove a spotlight from our array */
     turnOffLight(num) {
         // remove the lagger
-        var visable = this.spotlights.children().filter(node => node.opacity()).reverse()
+        var visable = this.spotlights.children().filter(node => node.opacity()).reverse();
         for (var i = 0; i < num; i++) {
-            visable[i].animate(ANIMATION_DURATION).opacity(0)
+            visable[i].animate(ANIMATION_DURATION).opacity(0);
         }
     }
 }
@@ -634,28 +639,31 @@ class TextController {
 
     constructor() {
         // initalize out private properties
-        this.disable()
-        this.Times = ["Initial", "100-1000 Years", "100 Thousand Years", "1 Million Years", "10 Million Years"]
+        this.disable();
+        this.Times = ["Initial", "100-1000 Years", "100 Thousand Years", "1 Million Years", "10 Million Years"];
     }
 
     /* displays the text from the animated Object */
     displayText(AOarray) {
         return new Promise((resolve, reject) => {
             // display the text
-            console.log(AOarray[0].TPdata[this.currentTP])
+            console.log(AOarray[0].TPdata[this.currentTP]);
             // $("#message").text(AOarray[0].TPdata[this.currentTP].text)
             // document.getElementById("details").innerHTML = `${AOarray[0].imageData.label} <span>${AOarray[0].TPdata[AOarray[0].currentState].value+1} to ${AOarray[0].TPdata[this.currentTP].value+1}</span>`
 
-            SVG.get("message2").text(wrapText(AOarray[0].TPdata[this.currentTP].text));
+            SVG.get("message2").text(this.wrapText(AOarray[0].TPdata[this.currentTP].text));
             SVG.get("details2").text(`${AOarray[0].imageData.label}: ${AOarray[0].TPdata[AOarray[0].currentState].value+1} to ${AOarray[0].TPdata[this.currentTP].value+1}`);
 
-            resolve(AOarray)
-        })
+            resolve(AOarray);
+        });
     }
 
     displayInstructions() {
         //$("#message").text("Click on a time period above");
-        SVG.get("message2").text("Click on a time period above");
+        // SVG.get("message2").text("Click on a time period above");
+        var lipsum = new LoremIpsum();
+        var test2 = lipsum.generate(100);
+        SVG.get("message2").text(this.wrapText(test2));
 
     }
     /* removes the text from the text box */
@@ -665,43 +673,95 @@ class TextController {
             //$("#message").text("")
             //$("#details").text("")
 
-            SVG.get("message2").text("")
-            SVG.get("details2").text("")
+            SVG.get("message2").text("");
+            SVG.get("details2").text("");
 
             // also make sure that 'isActive' is set to false
-            this.isActive = "false"
+            this.isActive = "false";
 
-            resolve(animatedObjectArray)
-        })
+            resolve(animatedObjectArray);
+        });
     }
+
+    wrapText(textIn) {
+        var maxLineLength = layoutData.textMessage.messageWidth - (2 * layoutData.textMessage.padding),
+            fontSettings = layoutData.styling.textMessage;
+
+        function getVisualSize(text, fontSettings) {
+            var tempText = draw
+                .text(text)
+                .font({
+                    color: "green",
+                    family: fontSettings.family,
+                    size: fontSettings.size,
+                    weight: fontSettings.weight
+                }).move(300, 300),
+                size = tempText.bbox();
+
+            //delete the element
+            tempText.node.parentElement.removeChild(tempText.node);
+            return size;
+        }
+
+
+
+        //var maxLineLength = 150; //magic number I played with to find (based on font size)
+        var hi = textIn
+            //split on spaces into an array of strings
+            .split(/\s+/g)
+            //put them back into line strings based on the length of the line
+            .reduce(function (paragraph, word) {
+                var lastLine = paragraph.length - 1;
+                //check if we have room, +1 is for the new space
+                //=== 0 is incase one word is longer than the max length it will not skip the first line
+                if (paragraph[lastLine].length === 0) {
+                    paragraph[lastLine] += word;
+                } else if (getVisualSize(paragraph[lastLine] + " " + word, fontSettings).width <= maxLineLength) {
+                    //} else if (paragraph[lastLine].length + word.length + 1 <= maxLineLength) {
+                    //we have room, add that word to current line
+                    paragraph[lastLine] += ' ' + word;
+                } else {
+                    //no room, make new line
+                    paragraph.push(word);
+                }
+                return paragraph;
+            }, [''])
+            // we have an array of string lines, join to one string with '\n' for svg.js text
+            .join('\n');
+
+        console.log('textOut:', hi);
+
+        return hi;
+    }
+
 
     /* makes the buttons clickable */
     enable(disableBackButton) {
         // also set 'isActive' to true
-        this.isActive = true
+        this.isActive = true;
         // So that they can't go before the first animation
         if (!disableBackButton) {
-            $("#prev").prop("disabled", false)
+            $("#prev").prop("disabled", false);
         }
-        $("#next").prop("disabled", false)
-        $("#terminate").prop("disabled", false)
+        $("#next").prop("disabled", false);
+        $("#terminate").prop("disabled", false);
     }
 
     /* makes the buttons not clickable */
     disable() {
         // also set 'isActive' to false
-        this.isActive = false
-        $("#prev").prop("disabled", true)
-        $("#next").prop("disabled", true)
-        $("#terminate").prop("disabled", true)
+        this.isActive = false;
+        $("#prev").prop("disabled", true);
+        $("#next").prop("disabled", true);
+        $("#terminate").prop("disabled", true);
     }
 
     /* Set the title of our text box to the time period's name */
     setTimePeriod(currentTP) {
-        this.currentTP = currentTP
-        var phaseTitle = this.Times[this.currentTP]
+        this.currentTP = currentTP;
+        var phaseTitle = this.Times[this.currentTP];
         //$("#currentTP").text(phaseTitle)
-        SVG.get("currentTP2").text(phaseTitle)
+        SVG.get("currentTP2").text(phaseTitle);
     }
 }
 
@@ -715,8 +775,8 @@ function drawSpotLightOutlines() {
                 color: '#f06',
                 width: 4
             });
-        })
-    })
+        });
+    });
 }
 
 function drawBox() {
@@ -743,96 +803,5 @@ function resizeThrottler() {
     }
 }
 
-function testText() {
-
-    draw.text("The BEST!")
-        .attr('id', "message2")
-        .font(layoutData.styling["normal"])
-        .font({
-            size: 45,
-            anchor: 'middle'
-        })
-        .center(size.width / 2, size.height / 2);
-}
-
-function wrapText(textIn) {
-    var maxLineLength = 150; //magic number I played with to find (based on font size)
-    return textIn
-        //split on spaces into an array of strings
-        .split(/\s+/g)
-        //put them back into line strings based on the length of the line
-        .reduce(function (paragraph, word) {
-            var lastLine = paragraph.length - 1;
-            //check if we have room, +1 is for the new space
-            //=== 0 is incase one word is longer than the max length it will not skip the first line
-            if (paragraph[lastLine].length === 0) {
-                paragraph[lastLine] += word;
-            } else if (paragraph[lastLine].length + word.length + 1 <= maxLineLength) {
-                //we have room, add that word to current line
-                paragraph[lastLine] += ' ' + word;
-            } else {
-                //no room, make new line
-                paragraph.push(word);
-            }
-            return paragraph;
-        }, [''])
-        // we have an array of string lines, join to one string with '\n' for svg.js text
-        .join('\n');
-}
-
-function drawTextBox() {
-
-
-
-    var textBoxH = 200,
-        padding = 10;
-
-    //make the group for the text box
-    var textBox = draw.group()
-        .attr('id', "textBox2")
-        .move(size.vbX, size.vbHeight + size.vbY - textBoxH);
-
-    //background for the 
-    textBox.rect(size.vbWidth, textBoxH)
-        .fill('rgb(11,19,18)');
-
-    //Title
-    textBox.text("Initial")
-        .attr('id', "currentTP2")
-        .move(padding, padding)
-        .font(layoutData.styling["normal"])
-        .font(layoutData.styling["operator"]);
-
-    //values
-    textBox.text("Mountains: 1 to 2")
-        .attr('id', "details2")
-        .move(300, padding)
-        .font(layoutData.styling["normal"])
-        .font(layoutData.styling["operator"]);
-
-    var lipsum = new LoremIpsum();
-    var test2 = lipsum.generate(100);
-
-    //message text 
-    textBox.text(wrapText(test2))
-        .attr('id', "message2")
-        .move(padding, padding + 35)
-        .font(layoutData.styling["normal"])
-        .font({
-            size: 20,
-            weight: 'normal'
-        });
-
-}
-drawTextBox();
-//testText();
-
-// #message2
-
 // drawBox();
 // drawSpotLightOutlines();
-
-//var fixV = imageData[1].spotlights[0].map(function (spotPoint) {
-//    return [Math.round(spotPoint[0]), Math.round(spotPoint[1])]
-//})
-//console.log(JSON.stringify(fixV));

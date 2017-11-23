@@ -1,39 +1,64 @@
 /*eslint no-unused-vars:0*/
-var layoutData = {
-    styling: {
-        normal: {
-            family: "'Roboto', sans-serif",
-            weight: 600,
-            size: 14,
-            fill: "#fff",
-            leading: 1.2,
-        },
-        forcer: {
-            family: "'Roboto', sans-serif",
-            anchor: 'middle',
-            fill: "#297082",
-            size: 14
-        },
-        operator: {
-            size: 28,
-            weight: 400
-        },
-        notBold: {
-            weight: 400
-        },
-        smallText: {
-            size: 12,
-            weight: 400
-        },
-        hide: {
-            visibility: 'hidden'
-        },
-        center: {
-            anchor: 'middle'
-        }
+var size = {
+        width: 1730,
+        height: 938,
+        vbWidth: 1600,
+        vbX: 50,
+        vbY: 60
     },
-    background: [
-        {
+    layoutData = {
+        styling: {
+            normal: {
+                family: "'Roboto', sans-serif",
+                weight: 700,
+                size: 14,
+                fill: "#fff",
+                leading: 1.3,
+            },
+            forcer: {
+                family: "'Roboto', sans-serif",
+                anchor: 'middle',
+                fill: "#297082",
+                size: 14
+            },
+            textMessage: {
+                family: "'Roboto', sans-serif",
+                weight: '400',
+                size: 20,
+                fill: "#fff",
+                leading: 1.25,
+            },
+            textTitle:{
+                family: "'Roboto', sans-serif",
+                weight: '700',
+                fill: '#fff',
+                size: 30
+            },
+            textDetails : {
+                family: "'Roboto', sans-serif",
+                weight: '400',
+                fill: '#aaa',
+                size: 30
+            },
+            operator: {
+                size: 28,
+                weight: 400
+            },
+            notBold: {
+                weight: 400
+            },
+            smallText: {
+                size: 12,
+                weight: 400
+            },
+            hide: {
+                visibility: 'hidden'
+            },
+            center: {
+                anchor: 'middle'
+            }
+        },
+        background: [{
             ref: "images/paper-doll/background.png",
             width: 1730,
             height: 938,
@@ -81,9 +106,9 @@ var layoutData = {
             height: 46,
             x: 136,
             y: 118
-        }],
-    text: [
-        {
+        }
+        ],
+        text: [{
             text: "FORCING & RESPONSE SIMULATOR",
             x: 126,
             y: 90,
@@ -203,9 +228,9 @@ var layoutData = {
             y: 601,
             font: []
         }
-	],
-    timeline: [
-		[{
+        ],
+        timeline: [
+            [{
                 ref: "images/paper-doll/time1On.png",
                 width: 64,
                 height: 30
@@ -218,8 +243,9 @@ var layoutData = {
             {
                 text: "INITIAL",
                 x: 6
-            }],
-		[{
+            }
+            ],
+            [{
                 ref: "images/paper-doll/time2On.png",
                 width: 90,
                 height: 30
@@ -232,8 +258,9 @@ var layoutData = {
             {
                 text: "100-1000 Y",
                 x: 17
-            }],
-		[{
+            }
+            ],
+            [{
                 ref: "images/paper-doll/time3On.png",
                 width: 119,
                 height: 30
@@ -246,8 +273,9 @@ var layoutData = {
             {
                 text: "100 KY",
                 x: 22
-            }],
-		[{
+            }
+            ],
+            [{
                 ref: "images/paper-doll/time4On.png",
                 width: 162,
                 height: 30
@@ -260,8 +288,9 @@ var layoutData = {
             {
                 text: "1 MY",
                 x: 22
-            }],
-		[{
+            }
+            ],
+            [{
                 ref: "images/paper-doll/time5On.png",
                 width: 229,
                 height: 30
@@ -274,11 +303,12 @@ var layoutData = {
             {
                 text: "10 MY",
                 x: 22
-            }]
-	],
-    timelinePlacement: [0, 44, 113, 217, 364],
-    forcers: [
-		[{
+            }
+            ]
+        ],
+        timelinePlacement: [0, 44, 113, 217, 364],
+        forcers: [
+            [{
                 ref: "images/paper-doll/mountains_inactive.png",
                 width: 56,
                 height: 70
@@ -292,8 +322,9 @@ var layoutData = {
                 text: "MOUNTAINS",
                 x: 25,
                 y: 75
-            }],
-		[{
+            }
+            ],
+            [{
                 ref: "images/paper-doll/volcanoes_inactive.png",
                 width: 54,
                 height: 70
@@ -307,8 +338,9 @@ var layoutData = {
                 text: "VOLCANOES",
                 x: 25,
                 y: 75
-            }],
-		[{
+            }
+            ],
+            [{
                 ref: "images/paper-doll/carbon%20burial_inactive.png",
                 width: 74,
                 height: 65
@@ -322,8 +354,9 @@ var layoutData = {
                 text: "CARBON BURIAL",
                 x: 35,
                 y: 75
-            }],
-		[{
+            }
+            ],
+            [{
                 ref: "images/paper-doll/carbon%20release_inactive.png",
                 width: 81,
                 height: 66
@@ -337,8 +370,9 @@ var layoutData = {
                 text: "CARBON RELEASE",
                 x: 37,
                 y: 75
-            }],
-		[{
+            }
+            ],
+            [{
                 ref: "images/paper-doll/insulation_inactive.png",
                 width: 52,
                 height: 70
@@ -352,7 +386,27 @@ var layoutData = {
                 text: "INSULATION",
                 x: 25,
                 y: 75
-            }]
-	],
-    forcersPlacement: [[-10, 0], [95, 0], [195, 0], [323, 0], [452, 0]],
-}
+            }
+            ]
+        ],
+        forcersPlacement: [
+            [-10, 0],
+            [95, 0],
+            [195, 0],
+            [323, 0],
+            [452, 0]
+        ],
+        textMessage: {
+            height: 200,
+            padding: 10,
+            messageWidth: size.vbWidth - 300,
+            messageHeight: 150,
+            strokeColor: '#2F767D',
+            strokeWidth : 7
+        }
+    };
+
+
+//update the size data
+size.height += layoutData.textMessage.height;
+size.vbHeight = Math.round(size.vbWidth * size.height / size.width);

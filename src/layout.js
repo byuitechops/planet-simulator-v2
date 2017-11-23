@@ -1,16 +1,6 @@
 /*eslint-env es6, browser*/
 /*eslint no-console:0, semi: ["error", "always"] */
-/*global SVG, $, imageData, layoutData*/
-var textBoxH = 200,
-    size = {
-        width: 1730,
-        height: 938 + textBoxH,
-        vbWidth: 1600,
-        vbX: 50,
-        vbY: 60,
-        textBoxH: textBoxH
-    };
-size.vbHeight = Math.round(size.vbWidth * size.height / size.width);
+/*global SVG, $, imageData, layoutData, size*/
 
 function fixSVGSizeOld() {
     document.querySelector('#wrapper').style.width = '100%'
@@ -113,8 +103,8 @@ function fixSVGSize() {
         .sort((a, b) => b.h - a.h)
         //remove the ones that don't fit
         .filter((size) => {
-            var widthGood = size.w <= wSize.w - (2*padding),
-                heightGood = size.h <= wSize.h - (2*padding);
+            var widthGood = size.w <= wSize.w - (2 * padding),
+                heightGood = size.h <= wSize.h - (2 * padding);
             return widthGood && heightGood;
         });
 
@@ -126,8 +116,8 @@ function fixSVGSize() {
 }
 
 var draw = SVG('drawing')
-    .size(size.width, size.height + size.textBoxH)
-    .viewbox(size.vbX, size.vbY, size.vbWidth, size.vbHeight + size.textBoxH);
+    .size(size.width, size.height)
+    .viewbox(size.vbX, size.vbY, size.vbWidth, size.vbHeight);
 
 //set the overflow attribute on the svg element
 // draw.node.setAttribute("overflow", "hidden");
@@ -312,3 +302,58 @@ if ((window.location.href).includes('&home=homepage')) {
     var linkHome = 'homepage.html?file=homepage';
     backToHome.linkTo(linkHome);
 }
+
+/************************* TEXT BOX AREA *****************************/
+function drawTextBox() {
+    var set = layoutData.textMessage;
+
+    //make the group for the text
+    var textBox = draw.group()
+        .attr('id', "textBox2")
+        .move(size.vbX, size.vbY + size.vbHeight - set.height);
+
+    //background for the text area
+    textBox.rect(size.vbWidth, set.height)
+        .fill('rgb(11,19,18)');
+
+    //background for the message
+    textBox.rect(set.messageWidth, set.messageHeight)
+        .attr('name', 'textMessageBg')
+        .fill('none')
+        .move(set.padding, set.padding + 35);
+
+    //the lines
+    textBox.line(set.messageWidth + set.padding, -1, set.messageWidth + set.padding, set.height + 1)
+        .attr('name', 'vertLine')
+        .stroke({
+            color: set.strokeColor,
+            width: set.strokeWidth
+        });
+
+    textBox.line(0, -1,size.vbWidth, 0)
+        .attr('name', 'horizontalLine')
+        .stroke({
+            color: set.strokeColor,
+            width: set.strokeWidth
+        });
+
+    //Title
+    textBox.text("")
+        .attr('id', "currentTP2")
+        .move(set.padding, 0)
+        .font(layoutData.styling.textTitle);
+
+    //details ___ to ___
+    textBox.text("")
+        .attr('id', "details2")
+        .move(300, 0)
+        .font(layoutData.styling.textDetails);
+
+    //message text 
+    textBox.text("")
+        .attr('id', "message2")
+        .move(set.padding, set.padding + 35)
+        .font(layoutData.styling.textMessage);
+
+}
+drawTextBox();
