@@ -17,10 +17,10 @@
     },
     "homepage": "https://github.com/byuitechops/planet-simulator-v2#readme",
     "devDependencies": {
-        "babel-cli": "^6.24.1",
-        "babel-preset-env": "^1.4.0",
-        "uri": "1.18.12"
+        "babel-cli": "^6.26.0",
+        "babel-preset-env": "^1.6.1"
     },
     "author": "Benjamin Earl",
-    "license": "ISC"
+    "license": "ISC",
+    "dependencies": {}
 }
